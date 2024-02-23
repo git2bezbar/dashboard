@@ -10,3 +10,17 @@ export interface CustomizationSettings {
   buttonFont: string;
   footerLayout: string;
 }
+
+export type PageType = "home" | "about" | "menu" | "contact" | "legal";
+
+export interface Page {
+  id: number;
+  type: PageType;
+  order: number;
+  description: string;
+  isActive: string;
+  uuid: UUID;
+  websiteId: number;
+  createdAt: string;
+  updatedAt: string;
+}
