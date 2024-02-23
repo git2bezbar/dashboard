@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`grid grid-cols-dashboard font-raleway`}>
+      <body className="grid grid-cols-dashboard font-raleway relative">
         <Sidebar />
         <main className="flex flex-col">
           <div className="flex items-center justify-end px-8 py-6 border-b border-b-black/10">
