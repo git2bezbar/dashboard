@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import Sidebar from "@/src/components/Sidebar";
 import './globals.css'
 import AccountMenu from '@/src/components/AccountMenu';
-import '@fork2e/umbrella/dist/lib.min.css'
+import { Toaster } from "@/components/ui/toaster";
+import '@fork2e/umbrella/dist/lib.min.css';
 
 export const metadata: Metadata = {
   title: 'Forkee | Dashboard',
@@ -26,6 +27,7 @@ export default function RootLayout({
             {children}
           </div>
         </main>
+        <Toaster />
       </body>
     </html>
   )
