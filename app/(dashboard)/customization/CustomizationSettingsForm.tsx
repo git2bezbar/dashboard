@@ -60,8 +60,6 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
         variant: "destructive"
       })
     }
-
-
   }
 
   const resetSettings = (e:FormEvent) => {

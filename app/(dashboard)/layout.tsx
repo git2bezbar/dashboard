@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Sidebar from "@/src/components/Sidebar";
-import './globals.css'
+import '../globals.css'
 import AccountMenu from '@/src/components/AccountMenu';
 import { Toaster } from "@/components/ui/toaster";
 import '@fork2e/umbrella/dist/lib.min.css';
