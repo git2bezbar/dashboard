@@ -3,7 +3,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@fork2e/umbrella";
 import { PAGE_NAMES } from "@/services/commons";
 import { Page } from "@/services/types";
-import Link from "next/link";
 
 export interface PageListProps {
   pages: Page[];
