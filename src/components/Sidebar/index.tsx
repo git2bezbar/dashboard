@@ -3,7 +3,7 @@ import SidebarItem from "./SidebarItem";
 
 export default function Sidebar() {
   return (
-    <header className="bg-black text-white p-8 h-screen flex flex-col gap-16 items-start">
+    <header className="sticky top-0 bg-black text-white p-8 h-screen flex flex-col gap-16 items-start">
       <Link href="/">
         <img src="/logo-white.svg"/>
       </Link>

@@ -1,5 +1,5 @@
 import ky from "ky";
-import { UUID } from "../types";
+import { Page, UUID } from "../types";
 
 /**
  * Provides a list of pages for a given website.
@@ -10,7 +10,7 @@ import { UUID } from "../types";
  */
 export const getPages = async (
   uuid: UUID,
-) => await ky.get(`http://localhost:3333/${uuid}/pages`).json();
+):Promise<Page[]> => await ky.get(`http://localhost:3333/${uuid}/pages`).json();
 
 /**
  * Provides the content of a page for a given website.
