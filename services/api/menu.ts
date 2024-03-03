@@ -1,5 +1,5 @@
 import ky from "ky";
-import { UUID } from "../types";
+import { MenuPage, UUID } from "../types";
 
 /**
  * Provides the menu for a given website.
@@ -10,7 +10,7 @@ import { UUID } from "../types";
  */
 export const getMenu = async (
   uuid: UUID,
-) => await ky.get(`http://localhost:3333/${uuid}/menu`).json();
+): Promise<MenuPage[]> => await ky.get(`http://localhost:3333/${uuid}/menu`).json();
 
 /**
  * todo
@@ -20,7 +20,7 @@ export const getMenu = async (
  * await updateMenu(uuid, updatedMenu);
  * ```
  */
-// export const updateMenu = async (
-//   uuid: UUID,
-//   updatedMenu: any,
-// ) => await ky.post(`http://localhost:3333/${uuid}/menu`);
+export const updateMenu = async (
+  uuid: UUID,
+  updatedMenu: MenuPage[],
+) => await ky.post(`http://localhost:3333/${uuid}/menu`, { json: updatedMenu }).json();
