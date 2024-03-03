@@ -1,3 +1,5 @@
+import { UniqueIdentifier } from "@dnd-kit/core";
+
 export type UUID = string;
 
 export interface CustomizationSettings {
@@ -23,4 +25,12 @@ export interface Page {
   websiteId: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface MenuPage {
+  id: UniqueIdentifier;
+  type: PageType;
+  order: number;
+  isActive: boolean;
+  uuid: UUID;
 }
