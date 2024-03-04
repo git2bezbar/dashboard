@@ -34,3 +34,14 @@ export interface MenuPage {
   isActive: boolean;
   uuid: UUID;
 }
+export interface SocialLink {
+  platform: string;
+  url: string;
+  is_active: boolean | number;
+}
+
+export interface ContactSettings {
+  email: string;
+  phoneNumber: string;
+  socialLinks: SocialLink[];
+}

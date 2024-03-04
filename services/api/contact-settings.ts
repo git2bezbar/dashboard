@@ -1,5 +1,5 @@
 import ky from "ky";
-import { UUID } from "../types";
+import { ContactSettings, UUID } from "../types";
 
 /**
  * Provides the contact settings for a given website.
@@ -10,7 +10,7 @@ import { UUID } from "../types";
  */
 export const getContactSettings = async (
   uuid: UUID,
-) => await ky.get(`http://localhost:3333/${uuid}/contact-settings`).json();
+):Promise<ContactSettings> => await ky.get(`http://localhost:3333/${uuid}/contact-settings`).json();
 
 /**
  * todo
@@ -20,7 +20,7 @@ export const getContactSettings = async (
  * await updateContactSettings(uuid, updatedContactSettings);
  * ```
  */
-// export const updateContactSettings = async (
-//   uuid: UUID,
-//   updatedContactSettings: any,
-// ) => await ky.post(`http://localhost:3333/${uuid}/contact-settings`);
+export const updateContactSettings = async (
+  uuid: UUID,
+  updatedContactSettings: ContactSettings,
+) => await ky.post(`http://localhost:3333/${uuid}/contact-settings`, { json: updatedContactSettings}).json();
