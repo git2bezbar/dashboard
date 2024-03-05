@@ -1,5 +1,5 @@
 import ky from "ky";
-import { UUID } from "../types";
+import { GeneralSettings, UUID } from "../types";
 
 /**
  * Provides the general settings for a given website.
@@ -10,7 +10,7 @@ import { UUID } from "../types";
  */
 export const getGeneralSettings = async (
   uuid: UUID,
-) => await ky.get(`http://localhost:3333/${uuid}/general-settings`).json();
+): Promise<GeneralSettings> => await ky.get(`http://localhost:3333/${uuid}/general-settings`).json();
 
 /**
  * todo
@@ -20,7 +20,7 @@ export const getGeneralSettings = async (
  * await updateGeneralSettings(uuid, updatedGeneralSettings);
  * ```
  */
-// export const updatedGeneralSettings = async (
-//   uuid: UUID,
-//   updatedGeneralSettings: any,
-// ) => await ky.post(`http://localhost:3333/${uuid}/general-settings`);
+export const updateGeneralSettings = async (
+  uuid: UUID,
+  updatedGeneralSettings: GeneralSettings,
+) => await ky.post(`http://localhost:3333/${uuid}/general-settings`, { json: updatedGeneralSettings}).json();

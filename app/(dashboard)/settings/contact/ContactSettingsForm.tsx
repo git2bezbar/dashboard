@@ -9,7 +9,6 @@ import { updateContactSettings } from "@/services/api/contact-settings";
 import { toast } from "@/components/ui/use-toast";
 import { Button, Input, Switch } from "@fork2e/umbrella";
 import { FormEvent } from "react";
-import { ErrorMessage } from "@hookform/error-message"
 
 export interface ContactSettingsFormProps {
   settings: ContactSettings;
@@ -36,7 +35,6 @@ export default function ContactSettings({ settings: providedSettings }: ContactS
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      console.log("here", data)
       await updateContactSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df', data);
       toast({
         title: "Paramètres de contact mis à jour ✨"
