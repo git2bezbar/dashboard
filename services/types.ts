@@ -45,3 +45,21 @@ export interface ContactSettings {
   phoneNumber: string;
   socialLinks: SocialLink[];
 }
+
+export interface TimeSlot {
+  openingTime: string;
+  closingTime: string;
+  dayOfWeek: string;
+  slotNumber: number;
+}
+
+export interface GeneralSettings {
+  websiteTitle: string;
+  websiteHeadline: string;
+  websiteLogo: string;
+  websiteFavicon: string;
+  street: string;
+  city: string;
+  postCode: string;
+  timeSlots: TimeSlot[];
+}
