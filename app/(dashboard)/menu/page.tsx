@@ -9,11 +9,9 @@ export default async function Menu() {
 
   const pages = await getMenu('1bcc2d88-43e2-47f9-a009-d7a2418604df');
   pages.sort((a, b) => a.order - b.order);
-  console.log(pages);
   const handleMenuUpdate = async (updatedMenu: MenuPage[]) => {
     "use server"
     const updatedPages = await updateMenu('1bcc2d88-43e2-47f9-a009-d7a2418604df', updatedMenu);
-    console.log('here are the updated pages: ',updatedPages);
   }
   return (
     <>
