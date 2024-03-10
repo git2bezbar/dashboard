@@ -22,7 +22,7 @@ export const getPages = async (
 export const getPage = async (
   uuid: UUID,
   pageUuid: UUID,
-) => await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`).json();
+): Promise<Page> => await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`).json();
 
 /**
  * todo
@@ -32,8 +32,8 @@ export const getPage = async (
  * await getPages(uuid, pageUuid);
  * ```
  */
-// export const updatePage = async (
-//   uuid: UUID,
-//   pageUuid: UUID,
-//   updatedPage: any,
-// ) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`);
+export const updatePage = async (
+  uuid: UUID,
+  pageUuid: UUID,
+  updatedPage: Page,
+) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, { json: updatedPage }).json();
