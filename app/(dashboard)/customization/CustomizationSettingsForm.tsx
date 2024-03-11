@@ -5,7 +5,6 @@ import { updateCustomizationSettings } from "@/services/api/customization";
 import { CustomizationSettings } from "@/services/types";
 import {
   Button,
-  Color,
   Input,
   Label,
   RadioGroup,
@@ -21,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/ui/use-toast";
+import { Color } from "@/components/ui/color";
 
 export interface CustomizationSettingsFormProps {
   settings: CustomizationSettings;
@@ -62,7 +62,7 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
     }
   }
 
-  const resetSettings = (e:FormEvent) => {
+  const resetSettings = (e: FormEvent) => {
     e.preventDefault();
     form.reset();
   };
@@ -153,11 +153,31 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
           </div>
           <div className="flex flex-col justify-start items-start gap-4">
             <Label className="font-bold" htmlFor="primaryColor">Couleur principale</Label>
-            {/* <Color currentColor="#6624FF"/> */}
+            <FormField
+              control={form.control}
+              name="primaryColor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Color {...field} currentColor={field.value} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
           </div>
-          <div className="flex flex-col justify-start items-start gap-4">
+          <div className="flex flex-col items-start gap-4">
             <Label className="font-bold" htmlFor="secondaryColor">Couleur secondaire</Label>
-            {/* <Color currentColor="#6624FF"/> */}
+            <FormField
+              control={form.control}
+              name="secondaryColor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Color {...field} currentColor={field.value} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
           </div>
           <div className="flex flex-col justify-start items-start gap-4">
             <FormField
