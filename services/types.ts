@@ -20,8 +20,8 @@ export interface Page {
   type: PageType;
   order: number;
   description: string;
-  isActive: string;
   uuid: UUID;
+  widgets: any[];
   websiteId: number;
   createdAt: string;
   updatedAt: string;
