@@ -47,7 +47,6 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = (e) => {
     try {
-      console.log(menuPages);
       handleMenuUpdate(menuPages);
       toast({
         title: "Paramètres de menu mis à jour ✨"

@@ -47,7 +47,7 @@ export default function ContactSettings({ settings: providedSettings }: ContactS
     }
   }
 
-  const resetSettings = (e:FormEvent) => {
+  const resetSettings = (e: FormEvent) => {
     e.preventDefault();
     form.reset();
   };

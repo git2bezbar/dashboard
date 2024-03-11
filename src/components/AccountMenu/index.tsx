@@ -32,7 +32,7 @@ export default function AccountMenu() {
     >
       <img
         className="rounded-full ring-2 ring-white/30"
-        src="profile_picture.jpg"
+        src="/profile_picture.jpg"
         alt="AD Schwarzer"
         height={32}
         width={32}
