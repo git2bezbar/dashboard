@@ -15,7 +15,7 @@ import { updatePage } from "@/services/api/page";
 import { Page, UUID } from "@/services/types";
 import { Button, Input, Label, RadioGroup, RadioGroupItem, Switch } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormEvent, useEffect } from "react";
+import { FormEvent } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -24,8 +24,9 @@ export interface SinglePageCompProps {
   pageId: UUID;
 }
 
-const TextWidget = z.object({
-  name: z.string(),
+const textWidget = z.object({
+  id: z.number().optional(),
+  name: z.literal("Texte"),
   order: z.number(),
   content: z.object({
     title: z.string(),
@@ -33,21 +34,22 @@ const TextWidget = z.object({
   }),
 });
 
-const TextImageWidget = z.object({
-  name: z.string(),
+const textImageWidget = z.object({
+  id: z.number().optional(),
+  name: z.literal("Texte + Image"),
   order: z.number(),
   content: z.object({
     title: z.string(),
     subtitle: z.string(),
-    image: z.number().or(z.string()).optional(),
-    imagePosition: z.union([ z.literal("left"), z.literal("right") ]).optional(),
-    imageAlt: z.string().optional(),
+    image: z.number().or(z.string()),
+    imagePosition: z.union([ z.literal("left"), z.literal("right") ]),
+    imageAlt: z.string(),
   }),
 });
 
 const FormSchema = z.object({
   description: z.string(),
-  widgets: z.array(z.union([ TextImageWidget, TextWidget ])),
+  widgets: z.array(z.union([ textImageWidget, textWidget ])),
   id: z.number(),
   type: z.union([
     z.literal('home'),
@@ -64,7 +66,7 @@ const FormSchema = z.object({
   updatedAt: z.string(),
 });
 
-const emptyTextWidget: z.infer<typeof TextWidget> = {
+const emptyTextWidget: z.infer<typeof textWidget> = {
   name: "Texte",
   order: 0,
   content: {
@@ -73,7 +75,7 @@ const emptyTextWidget: z.infer<typeof TextWidget> = {
   },
 };
 
-const emptyTextImageWidget: z.infer<typeof TextImageWidget> = {
+const emptyTextImageWidget: z.infer<typeof textImageWidget> = {
   name: "Texte + Image",
   order: 0,
   content: {
@@ -100,9 +102,9 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
   });
 
   const renderTextWidget = 
-  (widget: z.infer<typeof TextWidget>, form: any, index: number) => {
+  (widget: z.infer<typeof textWidget>, form: any, index: number) => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4" key={widget.id}>
         <div className="flex items-center justify-between">
           <h3 className="font-bold">{ widget.name }</h3>
           <Button
@@ -157,9 +159,9 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
   }
 
   const renderTextImageWidget = 
-  (widget: z.infer<typeof TextImageWidget>, form: any, index: number) => {
+  (widget: z.infer<typeof textImageWidget>, form: any, index: number) => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4" key={widget.id}>
         <div className="flex items-center justify-between">
           <h3 className="font-bold">{ widget.name }</h3>
           <Button
@@ -182,8 +184,6 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
                   <Input
                     { ...field }
                     id={`widgets.${index}.content.title`}
-                    {...form.register(`widgets.${index}.content.title`)}
-                    value={field.value}
                   />
                 </FormControl>
               </FormItem>
@@ -201,8 +201,6 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
                   <Input
                     {...field}
                     id={`widgets.${index}.content.subtitle`}
-                    value={field.value}
-                    {...form.register(`widgets.${index}.content.subtitle`)}
                   />
                 </FormControl>
               </FormItem>
@@ -221,22 +219,21 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
                     className="flex flex-col items-start gap-4"
                     value={field.value}
                     onValueChange={field.onChange}
-                    {...form.register(`widgets.${index}.content.imagePosition`)}
                   >
                     <FormItem className="flex items-center gap-4">
                       <FormControl>
-                        <RadioGroupItem value="left" id={`widgets.${index}.content.imagePosition.left`} />
+                        <RadioGroupItem value="left" id={`left.${index}`} />
                       </FormControl>
                       <FormLabel>
-                        <Label htmlFor={`widgets.${index}.content.imagePosition.left`}>Image à gauche</Label>
+                        <Label htmlFor={`left.${index}`}>Image à gauche</Label>
                       </FormLabel>
                     </FormItem>
                     <FormItem className="flex items-center gap-4">
                       <FormControl>
-                        <RadioGroupItem value="right" id={`widgets.${index}.content.imagePosition.right`}/>
+                        <RadioGroupItem value="right" id={`right.${index}`} />
                       </FormControl>
                       <FormLabel>
-                        <Label htmlFor={`widgets.${index}.content.imagePosition.right`}>Image à droite</Label>
+                        <Label htmlFor={`right.${index}`}>Image à droite</Label>
                       </FormLabel>
                     </FormItem>
                   </RadioGroup>
@@ -256,8 +253,6 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
                   <Input
                     {...field}
                     id={`widgets.${index}.content.imageAlt`}
-                    value={field.value}
-                    {...form.register(`widgets.${index}.content.imageAlt`)}
                   />
                 </FormControl>
               </FormItem>
@@ -273,9 +268,7 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
       data.widgets.map((widget: any, i) => {
         widget.order = i;
       });
-      console.log("data: ", data)
-      console.log("page: ", providedPage)
-      // await updatePage('1bcc2d88-43e2-47f9-a009-d7a2418604df', pageId, data);
+      await updatePage('1bcc2d88-43e2-47f9-a009-d7a2418604df', pageId, data);
       toast({
         title: "Page mise à jour ✨"
       })
@@ -314,7 +307,7 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
         />
 
         { 
-          form.getValues().widgets.map((widget, index) => {
+          fields.map((widget, index) => {
             if (widget.name !== "Texte" && widget.name !== "Texte + Image") return null;
 
             if (widget.name === "Texte") {
@@ -359,8 +352,6 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
         </Dialog>
         
         <div className="flex gap-4">
-          {/* { console.log("errors: ",form.formState.errors) } */}
-          
           <Button disabled={!form.formState.isDirty} type="submit">Sauvegarder les changements</Button>
           <Button disabled={!form.formState.isDirty} variant="subtle" onClick={resetSettings}>Annuler</Button>
         </div>
