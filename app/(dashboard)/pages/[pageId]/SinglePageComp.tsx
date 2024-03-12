@@ -322,7 +322,7 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="fullWidth">Ajouter un widget</Button>
+            <Button size="fullWidth" className={fields.length > 10 ? "hidden" : ""}>Ajouter un widget</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
