@@ -1,9 +1,9 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import PageHeading from "@/src/components/PageHeading";
 import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
 
-import { getCustomizationSettings, updateCustomizationSettings } from "@/services/api/customization";
+import { getCustomizationSettings } from "@/services/api/customization";
 import CustomizationSettingsForm from "./CustomizationSettingsForm";
 
 export default async function Customization() {
@@ -15,9 +15,7 @@ export default async function Customization() {
         <Subtitle>Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper elit.</Subtitle>
       </PageHeading>
       <div className="grid grid-cols-12 items-start">
-        <CustomizationSettingsForm
-          settings={customizationSettings}
-        />
+        <CustomizationSettingsForm settings={customizationSettings} />
       </div>
     </> 
   )

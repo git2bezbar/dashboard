@@ -1,11 +1,16 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel
+} from "@/components/ui/form";
 import { updateCustomizationSettings } from "@/services/api/customization";
 import { CustomizationSettings } from "@/services/types";
 import {
   Button,
-  Input,
   Label,
   RadioGroup,
   RadioGroupItem,
@@ -24,7 +29,7 @@ import { Color } from "@/components/ui/color";
 
 export interface CustomizationSettingsFormProps {
   settings: CustomizationSettings;
-}
+};
 
 const FormSchema = z.object({
   headerLayout: z.string(),
@@ -37,28 +42,27 @@ const FormSchema = z.object({
   footerLayout: z.string(),
 });
 
-export default function CustomizationSettingsForm({ settings: providedSettings }:CustomizationSettingsFormProps) {
-
+export default function CustomizationSettingsForm({
+  settings: providedSettings
+}:CustomizationSettingsFormProps) {
   const { toast } = useToast();
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      ...providedSettings,
-    },
-  })
+    defaultValues: { ...providedSettings },
+  });
  
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await updateCustomizationSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df', data);
-      toast({
-        title: "Paramètres de personnalisation mis à jour ✨"
-      })
+      await updateCustomizationSettings(
+        '1bcc2d88-43e2-47f9-a009-d7a2418604df',
+        data
+      );
+      toast({ title: "Paramètres de personnalisation mis à jour ✨" });
     } catch (error) {
       toast({
         title: "Oups, les paramètres de personnalisation n'ont pas pu être mis à jour 😢",
         variant: "destructive"
-      })
+      });
     }
   }
 
@@ -152,7 +156,9 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
           />
           </div>
           <div className="flex flex-col justify-start items-start gap-4">
-            <Label className="font-bold" htmlFor="primaryColor">Couleur principale</Label>
+            <Label className="font-bold" htmlFor="primaryColor">
+              Couleur principale
+            </Label>
             <FormField
               control={form.control}
               name="primaryColor"
@@ -166,7 +172,9 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
             />
           </div>
           <div className="flex flex-col items-start gap-4">
-            <Label className="font-bold" htmlFor="secondaryColor">Couleur secondaire</Label>
+            <Label className="font-bold" htmlFor="secondaryColor">
+              Couleur secondaire
+            </Label>
             <FormField
               control={form.control}
               name="secondaryColor"
