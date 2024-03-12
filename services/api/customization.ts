@@ -10,7 +10,7 @@ import { CustomizationSettings, UUID } from "../types";
  */
 export const getCustomizationSettings = async (
   uuid: UUID,
-):Promise<CustomizationSettings> => await ky.get(`http://localhost:3333/${uuid}/customization`).json();
+):Promise<CustomizationSettings> => await ky.get(`http://localhost:3333/${uuid}/customization`, { cache: 'no-store' }).json();
 
 /**
  * Updates the customization settings for a given website.
@@ -22,4 +22,4 @@ export const getCustomizationSettings = async (
 export const updateCustomizationSettings = async (
   uuid: UUID,
   updatedCustomizationSettings: CustomizationSettings,
-) => await ky.post(`http://localhost:3333/${uuid}/customization`, { json: updatedCustomizationSettings}).json();
+) => await ky.post(`http://localhost:3333/${uuid}/customization`, { json: updatedCustomizationSettings, cache: 'no-store' }).json();

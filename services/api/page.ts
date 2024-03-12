@@ -10,7 +10,7 @@ import { Page, UUID } from "../types";
  */
 export const getPages = async (
   uuid: UUID,
-):Promise<Page[]> => await ky.get(`http://localhost:3333/${uuid}/pages`).json();
+):Promise<Page[]> => await ky.get(`http://localhost:3333/${uuid}/pages`, { cache: 'no-store' }).json();
 
 /**
  * Provides the content of a page for a given website.
@@ -22,7 +22,7 @@ export const getPages = async (
 export const getPage = async (
   uuid: UUID,
   pageUuid: UUID,
-): Promise<Page> => await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`).json();
+): Promise<Page> => await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`, { cache: 'no-store' }).json();
 
 /**
  * todo
@@ -36,4 +36,4 @@ export const updatePage = async (
   uuid: UUID,
   pageUuid: UUID,
   updatedPage: Page,
-) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, { json: updatedPage }).json();
+) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, { json: updatedPage, cache: 'no-store' }).json();

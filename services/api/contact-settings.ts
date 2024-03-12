@@ -10,7 +10,7 @@ import { ContactSettings, UUID } from "../types";
  */
 export const getContactSettings = async (
   uuid: UUID,
-):Promise<ContactSettings> => await ky.get(`http://localhost:3333/${uuid}/contact-settings`).json();
+):Promise<ContactSettings> => await ky.get(`http://localhost:3333/${uuid}/contact-settings`, { cache: 'no-store' }).json();
 
 /**
  * todo
@@ -23,4 +23,4 @@ export const getContactSettings = async (
 export const updateContactSettings = async (
   uuid: UUID,
   updatedContactSettings: ContactSettings,
-) => await ky.post(`http://localhost:3333/${uuid}/contact-settings`, { json: updatedContactSettings}).json();
+) => await ky.post(`http://localhost:3333/${uuid}/contact-settings`, { json: updatedContactSettings, cache: 'no-store' }).json();

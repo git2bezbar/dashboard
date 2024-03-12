@@ -10,7 +10,7 @@ import { MenuPage, UUID } from "../types";
  */
 export const getMenu = async (
   uuid: UUID,
-): Promise<MenuPage[]> => await ky.get(`http://localhost:3333/${uuid}/menu`).json();
+): Promise<MenuPage[]> => await ky.get(`http://localhost:3333/${uuid}/menu`, { cache: 'no-store' }).json();
 
 /**
  * todo
@@ -23,4 +23,4 @@ export const getMenu = async (
 export const updateMenu = async (
   uuid: UUID,
   updatedMenu: MenuPage[],
-) => await ky.post(`http://localhost:3333/${uuid}/menu`, { json: updatedMenu }).json();
+) => await ky.post(`http://localhost:3333/${uuid}/menu`, { json: updatedMenu, cache: 'no-store' }).json();
