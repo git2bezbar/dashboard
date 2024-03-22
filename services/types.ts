@@ -24,3 +24,16 @@ export interface Page {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface User {
+  id?: number;
+  username: string;
+  email?: string;
+  firstname: string;
+  lastname: string;
+}
+
+export interface AuthUser {
+  user: User;
+  isLogged: boolean;
+}
