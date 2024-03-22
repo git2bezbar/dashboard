@@ -28,6 +28,19 @@ export interface Page {
   updatedAt: string;
 }
 
+export interface User {
+  id?: number;
+  username: string;
+  email?: string;
+  firstname: string;
+  lastname: string;
+}
+
+export interface AuthUser {
+  user: User;
+  isLogged: boolean;
+}
+
 export interface MenuPage {
   id: UniqueIdentifier;
   type: PageType;
