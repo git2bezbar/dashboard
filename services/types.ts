@@ -1,3 +1,5 @@
+import { UniqueIdentifier } from "@dnd-kit/core";
+
 export type UUID = string;
 
 export interface CustomizationSettings {
@@ -18,8 +20,9 @@ export interface Page {
   type: PageType;
   order: number;
   description: string;
-  isActive: string;
+  isActive: boolean;
   uuid: UUID;
+  widgets: any[];
   websiteId: number;
   createdAt: string;
   updatedAt: string;
@@ -36,4 +39,41 @@ export interface User {
 export interface AuthUser {
   user: User;
   isLogged: boolean;
+}
+
+export interface MenuPage {
+  id: UniqueIdentifier;
+  type: PageType;
+  order: number;
+  isActive: boolean;
+  uuid: UUID;
+}
+export interface SocialLink {
+  platform: string;
+  url: string;
+  is_active: boolean | number;
+}
+
+export interface ContactSettings {
+  email: string;
+  phoneNumber: string;
+  socialLinks: SocialLink[];
+}
+
+export interface TimeSlot {
+  openingTime: string;
+  closingTime: string;
+  dayOfWeek: string;
+  slotNumber: number;
+}
+
+export interface GeneralSettings {
+  websiteTitle: string;
+  websiteHeadline: string;
+  websiteLogo: string;
+  websiteFavicon: string;
+  street: string;
+  city: string;
+  postCode: string;
+  timeSlots: TimeSlot[];
 }
