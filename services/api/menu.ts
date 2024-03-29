@@ -10,10 +10,15 @@ import { MenuPage, UUID } from "../types";
  */
 export const getMenu = async (
   uuid: UUID,
-): Promise<MenuPage[]> => await ky.get(`http://localhost:3333/${uuid}/menu`).json();
+  cookies: any,
+): Promise<MenuPage[]> => await ky.get(`http://localhost:3333/${uuid}/menu`, {
+  headers: {
+    'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
+  }
+}).json();
 
 /**
- * todo
+ *
  * Updates the menu for a given website.
  * @example
  * ```ts
@@ -23,4 +28,10 @@ export const getMenu = async (
 export const updateMenu = async (
   uuid: UUID,
   updatedMenu: MenuPage[],
-) => await ky.post(`http://localhost:3333/${uuid}/menu`, { json: updatedMenu }).json();
+  cookies: any,
+) => await ky.post(`http://localhost:3333/${uuid}/menu`, {
+  json: updatedMenu,
+  headers: {
+    'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
+  }
+}).json();

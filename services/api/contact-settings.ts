@@ -13,7 +13,7 @@ export const getContactSettings = async (
 ):Promise<ContactSettings> => await ky.get(`http://localhost:3333/${uuid}/contact-settings`).json();
 
 /**
- * todo
+ *
  * Updates the contact settings for a given website.
  * @example
  * ```ts

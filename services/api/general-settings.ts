@@ -13,7 +13,7 @@ export const getGeneralSettings = async (
 ): Promise<GeneralSettings> => await ky.get(`http://localhost:3333/${uuid}/general-settings`).json();
 
 /**
- * todo
+ *
  * Updates the general settings for a given website.
  * @example
  * ```ts

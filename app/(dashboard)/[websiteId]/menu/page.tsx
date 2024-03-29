@@ -3,15 +3,18 @@ import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
 import MenuForm from "./MenuForm";
 import { getMenu, updateMenu } from "@/services/api/menu";
-import { MenuPage } from "@/services/types";
+import { MenuPage, UUID } from "@/services/types";
+import { cookies } from "next/headers";
 
-export default async function Menu() {
+export interface MenuProps { params: { websiteId: UUID } }
 
-  const pages = await getMenu('1bcc2d88-43e2-47f9-a009-d7a2418604df');
+export default async function Menu({ params : { websiteId } }: MenuProps) {
+  const cookiesList = cookies().getAll();
+  const pages = await getMenu(websiteId, cookiesList);
   pages.sort((a, b) => a.order - b.order);
   const handleMenuUpdate = async (updatedMenu: MenuPage[]) => {
     "use server"
-    const updatedPages = await updateMenu('1bcc2d88-43e2-47f9-a009-d7a2418604df', updatedMenu);
+    const updatedPages = await updateMenu(websiteId, updatedMenu, cookiesList);
   }
   return (
     <>

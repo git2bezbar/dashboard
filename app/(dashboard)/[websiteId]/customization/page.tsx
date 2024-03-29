@@ -5,9 +5,18 @@ import Title from "@/src/components/Title";
 
 import { getCustomizationSettings, updateCustomizationSettings } from "@/services/api/customization";
 import CustomizationSettingsForm from "./CustomizationSettingsForm";
+import { cookies } from "next/headers";
+import { UUID } from "@/services/types";
 
-export default async function Customization() {
-  const customizationSettings = await getCustomizationSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df');
+export interface CustomizationSettingsProps {
+  params: {
+    websiteId: UUID;
+  };
+}
+
+export default async function Customization({ params: { websiteId }}: CustomizationSettingsProps) {
+  const cookiesList = cookies().getAll();
+  const customizationSettings = await getCustomizationSettings(websiteId, cookiesList);
   return (
     <>
       <PageHeading>

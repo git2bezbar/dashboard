@@ -10,7 +10,12 @@ import { Page, UUID } from "../types";
  */
 export const getPages = async (
   uuid: UUID,
-):Promise<Page[]> => await ky.get(`http://localhost:3333/${uuid}/pages`).json();
+  cookies: any,
+):Promise<Page[]> => await ky.get(`http://localhost:3333/${uuid}/pages`, { 
+  headers: {
+    'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
+  }
+}).json();
 
 /**
  * Provides the content of a page for a given website.
@@ -22,10 +27,15 @@ export const getPages = async (
 export const getPage = async (
   uuid: UUID,
   pageUuid: UUID,
-): Promise<Page> => await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`).json();
+  cookies: any,
+): Promise<Page> => await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`, {
+  headers: {
+    'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
+  }
+}).json();
 
 /**
- * todo
+ *
  * Provides a list of pages for a given website.
  * @example
  * ```ts
@@ -36,4 +46,10 @@ export const updatePage = async (
   uuid: UUID,
   pageUuid: UUID,
   updatedPage: Page,
-) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, { json: updatedPage }).json();
+  cookies: any,
+) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, {
+  json: updatedPage,
+  headers: {
+    'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
+  }
+}).json();

@@ -2,71 +2,60 @@
 
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-import { authenticate } from "@/services/api/auth";
-import { AuthUser, UUID } from "@/services/types";
+import { generateWebsite } from "@/services/api/website";
+import Title from "@/src/components/Title";
 import { Button, Input, Label } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { create } from "zustand";
 
-export interface LoginFormProps {
-  isLogged: boolean,
-  websiteId: UUID | undefined,
-}
-export interface CookiesCheckerState { cookiesList: any }
-
-export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
+export default function GenerateForm() {
   const router = useRouter();
 
-  if (isLogged && websiteId) {
-    console.log(websiteId);
-    router.push(`/${websiteId}`);
-  } else if (isLogged) {
-    router.push("/generate");
-  }
-
   const FormSchema = z.object({
-    email: z.string(),
-    password: z.string(),
+    websiteTitle: z.string().min(1),
+    email: z.string().min(1),
   })
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      websiteTitle: "",
       email: "",
-      password: "",
     },
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { email, password } = data;
     try {
-      await authenticate(email, password);
-      router.push("/websites");
+      const { uuid } = await generateWebsite(data.websiteTitle, data.email);
+      toast({
+        title: "Site généré ✨"
+      })
+      router.push(`/${uuid}`);
+      router
     } catch (error) {
       toast({
-        title: "Erreur de connexion",
-        description: "Identifiants incorrects",
-        variant: "destructive",
-      })    
+        title: "Oups, le site n'a pas pu être généré 😢",
+        variant: "destructive"
+      })
     }
   }
-
-  return (
+  
+  return (  
     <Form {...form}>
       <form
         className="col-span-5 flex flex-col gap-8 max-w-md"
         onSubmit={form.handleSubmit(onSubmit)}
       >
+        <Title>Créons votre site web</Title>
         <FormField
           control={form.control}
-          name="email"
+          name="websiteTitle"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="email">
-                <Label className="font-bold">Identifiant</Label>
+              <FormLabel htmlFor="websiteTitle">
+                <Label className="font-bold">Nom de votre établissement</Label>
               </FormLabel>
               <FormControl>
                 <Input {...field} />
@@ -76,20 +65,20 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="password">
-                <Label className="font-bold">Mot de passe</Label>
+              <FormLabel htmlFor="email">
+                <Label className="font-bold">Adresse email</Label>
               </FormLabel>
               <FormControl>
-                <Input {...field} type="password"/>
+                <Input {...field} />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button type="submit" className="self-start">Se connecter</Button>
+        <Button type="submit" className="self-start">Créer le site web</Button>
       </form>
     </Form>
-    )
+  )
 }
