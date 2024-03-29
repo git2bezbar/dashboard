@@ -3,7 +3,7 @@
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
 import { authenticate } from "@/services/api/auth";
-import { AuthUser } from "@/services/types";
+import { AuthUser, UUID } from "@/services/types";
 import { Button, Input, Label } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -11,13 +11,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { create } from "zustand";
 
-export interface LoginFormProps { isLogged: boolean }
+export interface LoginFormProps {
+  isLogged: boolean,
+  websiteId: UUID | undefined,
+}
 export interface CookiesCheckerState { cookiesList: any }
 
-export default function LoginForm({ isLogged }: LoginFormProps) {
+export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
   const router = useRouter();
 
-  if (isLogged) router.push('/');
+  if (isLogged && websiteId) {
+    console.log(websiteId);
+    router.push(`/${websiteId}`);
+  } else if (isLogged) {
+    router.push("/generate");
+  }
 
   const FormSchema = z.object({
     email: z.string(),
@@ -36,7 +44,7 @@ export default function LoginForm({ isLogged }: LoginFormProps) {
     const { email, password } = data;
     try {
       await authenticate(email, password);
-      router.push("/");
+      router.push("/websites");
     } catch (error) {
       toast({
         title: "Erreur de connexion",
