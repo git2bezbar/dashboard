@@ -3,10 +3,12 @@ import PageHeading from "@/src/components/PageHeading";
 import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
 import PageList from "./PageList";
+import { cookies } from "next/headers";
 
 
 export default async function Pages() {
-  const pages = await getPages('1bcc2d88-43e2-47f9-a009-d7a2418604df');
+  const cookiesList = cookies().getAll();
+  const pages = await getPages('1bcc2d88-43e2-47f9-a009-d7a2418604df', cookiesList);
   return (
     <>
       <PageHeading>

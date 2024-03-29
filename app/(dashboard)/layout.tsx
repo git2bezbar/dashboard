@@ -3,11 +3,12 @@ import '../globals.css'
 import AccountMenu from '@/src/components/AccountMenu';
 import { Toaster } from "@/components/ui/toaster";
 import '@fork2e/umbrella/dist/lib.min.css';
-import AuthChecker from "./AuthChecker";
+
 import { cookies } from "next/headers";
 import { checkAuthentication } from "@/services/api/auth";
 import { Metadata } from "next";
 import { getAccountInfo } from "@/services/api/account";
+import AuthChecker from "@/src/components/AuthChecker";
 
 export const metadata: Metadata = {
   title: 'Forkee | Dashboard',
@@ -31,7 +32,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body className="grid grid-cols-dashboard font-raleway relative">
-        <AuthChecker isLogged={isLogged} userInfo={userInfo}>
+        <AuthChecker isLogged={isLogged} userInfo={userInfo} cookiesList={cookiesList}>
           <Sidebar />
           <main className="flex flex-col">
             <div className="flex items-center justify-end px-8 py-6 border-b border-b-black/10">

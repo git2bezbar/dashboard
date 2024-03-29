@@ -4,13 +4,18 @@ import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
 import { Button } from "@fork2e/umbrella";
 import Link from "next/link";
-import PageList from "./pages/PageList";
+
 import { getCustomizationSettings } from "@/services/api/customization";
+import { cookies } from "next/headers";
+import PageList from "./pages/PageList";
+import { UUID } from "@/services/types";
 
-export default async function Home() {
+export interface HomeProps { params: { websiteId: UUID } }
 
-  const pages = await getPages('1bcc2d88-43e2-47f9-a009-d7a2418604df');
-  const customizationSettings = await getCustomizationSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df');
+export default async function Home({ params : { websiteId } }: HomeProps) {
+  const cookiesList = cookies().getAll();
+  const pages = await getPages(websiteId, cookiesList);
+  const customizationSettings = await getCustomizationSettings(websiteId, cookiesList);
 
   return (
     <>
