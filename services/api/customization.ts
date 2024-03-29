@@ -10,7 +10,12 @@ import { CustomizationSettings, UUID } from "../types";
  */
 export const getCustomizationSettings = async (
   uuid: UUID,
-):Promise<CustomizationSettings> => await ky.get(`http://localhost:3333/${uuid}/customization`).json();
+  cookies: any,
+):Promise<CustomizationSettings> => await ky.get(`http://localhost:3333/${uuid}/customization`, {
+  headers: {
+    'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
+  }
+}).json();
 
 /**
  * Updates the customization settings for a given website.
