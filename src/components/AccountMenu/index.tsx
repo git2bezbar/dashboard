@@ -1,13 +1,17 @@
 'use client';
 import { disconnect } from "@/services/api/auth";
+import { UUID } from "@/services/types";
 import useStore from "@/store/userInfoStore";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from "react";
 
-export interface AccountMenuProps { deleteCookies: () => void }
+export interface AccountMenuProps {
+  deleteCookies: () => void
+  websiteId: UUID
+}
 
-export default function AccountMenu({ deleteCookies }: AccountMenuProps) {
+export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuProps) {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuRef = useRef<HTMLUListElement>(null);
@@ -69,7 +73,7 @@ export default function AccountMenu({ deleteCookies }: AccountMenuProps) {
         isMenuOpened && (
           <ul ref={dropdownMenuRef} className={`absolute bg-white bottom-0 left-0 right-0 flex flex-col translate-y-[110%] border-2 border-black/20 rounded-ui`}>
             <li className="duration-300 hover:bg-whiteDark">
-              <Link className="flex items-center gap-4 px-4 py-3" href="/account">
+              <Link className="flex items-center gap-4 px-4 py-3" href={`/${websiteId}/account`}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M8.00008 10.1159C10.8925 10.1159 13.3334 10.5859 13.3334 12.3993C13.3334 14.2133 10.8765 14.6666 8.00008 14.6666C5.10833 14.6666 2.66675 14.1966 2.66675 12.3833C2.66675 10.5693 5.12367 10.1159 8.00008 10.1159ZM8.00008 1.33331C9.95948 1.33331 11.5294 2.90266 11.5294 4.86068C11.5294 6.8187 9.95948 8.38872 8.00008 8.38872C6.04135 8.38872 4.47076 6.8187 4.47076 4.86068C4.47076 2.90266 6.04135 1.33331 8.00008 1.33331Z" fill="#131313"/>
                 </svg>

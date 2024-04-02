@@ -26,9 +26,9 @@ export default async function Websites() {
         { !listOfWebsites.length && (
           <div className="flex flex-col items-center gap-4">
             <p>Vous n&apos;avez encore de site web.</p>
-            <Button>
-              <Link href="/generate">Créer mon site</Link>
-            </Button>
+            <Link href="/generate">
+              <Button>Créer mon site</Button>
+            </Link>
           </div>
         )}
       </ul>
