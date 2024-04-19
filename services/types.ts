@@ -20,7 +20,7 @@ export interface Page {
   type: PageType;
   order: number;
   description: string;
-  isActive: boolean;
+  isActive: number | boolean;
   uuid: UUID;
   widgets: any[];
   websiteId: number;
