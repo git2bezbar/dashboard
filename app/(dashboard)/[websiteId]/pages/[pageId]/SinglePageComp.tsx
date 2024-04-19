@@ -34,8 +34,10 @@ import {
   emptyBannerWidget,
   emptyTextImageWidget,
   emptyTextWidget,
+  emptyVideoWidget,
   textImageWidget,
   textWidget,
+  videoWidget,
 } from "@/services/widgets";
 
 export interface SinglePageCompProps {
@@ -47,7 +49,7 @@ export interface SinglePageCompProps {
 
 const FormSchema = z.object({
   description: z.string(),
-  widgets: z.array(z.union([ textImageWidget, textWidget, bannerWidget ])),
+  widgets: z.array(z.union([ textImageWidget, textWidget, bannerWidget, videoWidget ])),
   id: z.number(),
   type: z.union([
     z.literal('home'),
@@ -305,6 +307,63 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
     )
   }
 
+  const renderVideoWidget =
+  (widget: z.infer<typeof videoWidget>, form: any, index: number) => {
+    return (
+      <div className="flex flex-col gap-4" key={widget.id}>
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold">{ widget.name }</h3>
+          <Button
+            variant="subtle"
+            onClick={() => remove(index)}
+          >
+            Supprimer
+          </Button>
+        </div>
+        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
+          <FormField 
+            control={form.control}
+            name={`widgets.${index}.content.title`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={`widgets.${index}.content.title`} className="font-bold">
+                  Titre
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    id={`widgets.${index}.content.title`}
+                    value={field.value}
+                    {...form.register(`widgets.${index}.content.title`)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField 
+            control={form.control}
+            name={`widgets.${index}.content.video`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={`widgets.${index}.content.video`} className="font-bold">
+                  Lien de la vidéo
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    id={`widgets.${index}.content.video`}
+                    value={field.value}
+                    {...form.register(`widgets.${index}.content.video`)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+    )
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       data.widgets.map((widget: any, i) => {
@@ -357,6 +416,8 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
                 return renderTextWidget(widget, form, index);
               case "Texte + Image":
                 return renderTextImageWidget(widget, form, index);
+              case "Vidéo":
+                return renderVideoWidget(widget, form, index);
               default:
                 return null;
             }
@@ -396,6 +457,15 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
                     onClick={() => append({ ...emptyBannerWidget })}
                   >
                     Bannière
+                  </Button>
+                </DialogClose>
+                <DialogClose>
+                  <Button
+                    variant="subtle"
+                    className="p-4 rounded-ui border border-black/10"
+                    onClick={() => append({ ...emptyVideoWidget })}
+                  >
+                    Vidéo
                   </Button>
                 </DialogClose>
               </DialogDescription>

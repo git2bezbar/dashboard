@@ -56,6 +56,16 @@ export const imageWidget = z.object({
   }),
 });
 
+export const videoWidget = z.object({
+  id: z.number().optional(),
+  name: z.literal("Vidéo"),
+  order: z.number(),
+  content: z.object({
+    title: z.string(),
+    video: z.string(),
+  }),
+});
+
 // Empty widgets
 
 export const emptyTextWidget: z.infer<typeof textWidget> = {
@@ -106,5 +116,14 @@ export const emptyImageWidget: z.infer<typeof imageWidget> = {
     title: "",
     image: 0,
     imageAlt: "",
+  },
+};
+
+export const emptyVideoWidget: z.infer<typeof videoWidget> = {
+  name: "Vidéo",
+  order: 0,
+  content: {
+    title: "",
+    video: "",
   },
 };
