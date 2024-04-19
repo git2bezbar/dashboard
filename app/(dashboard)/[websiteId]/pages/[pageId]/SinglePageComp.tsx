@@ -350,20 +350,16 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
 
         { 
           fields.map((widget, index) => {
-            if (widget.name !== "Texte" && widget.name !== "Texte + Image" && widget.name !== "Bannière") return null;
-            
-            if (widget.name === "Bannière") {
-              return renderBannerWidget(widget, form, index);
+            switch (widget.name) {
+              case "Bannière":
+                return renderBannerWidget(widget, form, index);
+              case "Texte":
+                return renderTextWidget(widget, form, index);
+              case "Texte + Image":
+                return renderTextImageWidget(widget, form, index);
+              default:
+                return null;
             }
-
-            if (widget.name === "Texte") {
-              return renderTextWidget(widget, form, index);
-            }
-
-            if (widget.name === "Texte + Image") {
-              return renderTextImageWidget(widget, form, index);
-            }
-
           })
         }
 
