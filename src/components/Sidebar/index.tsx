@@ -10,7 +10,11 @@ export interface SidebarProps {
 }
 
 export default function Sidebar({ websiteId }: SidebarProps) {
-  const { pathname } = window.location;
+  
+  let pathname = "";
+
+  if (typeof window !== "undefined")
+    pathname = window.location.pathname;
   return (
     <header className="sticky top-0 bg-black text-white p-8 h-screen flex flex-col gap-16 items-start">
       <Link href={`/${websiteId}`}>
