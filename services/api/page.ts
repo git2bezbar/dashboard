@@ -39,7 +39,7 @@ export const getPage = async (
  * Provides a list of pages for a given website.
  * @example
  * ```ts
- * await getPages(uuid, pageUuid);
+ * await getPages(uuid, pageUuid, data, cookies);
  * ```
  */
 export const updatePage = async (
@@ -49,6 +49,7 @@ export const updatePage = async (
   cookies: any,
 ) => await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, {
   json: updatedPage,
+  credentials: 'include',
   headers: {
     'Cookie': cookies.map((cookie: any) => `${cookie.name}=${cookie.value}`).join('; '),
   }
