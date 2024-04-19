@@ -29,10 +29,6 @@ export const bannerWidget = z.object({
   order: z.number(),
   content: z.object({
     title: z.string(),
-    hasButton: z.number().min(0).max(1),
-    buttonContent: z.string().optional(),
-    buttonColor: z.union([ z.literal("primary"), z.literal("secondary") ]).optional(),
-    buttonLink: z.string().optional(),
     bannerColor: z.union([ z.literal("primary"), z.literal("secondary") ]),
   }),
 });
@@ -88,10 +84,6 @@ export const emptyBannerWidget: z.infer<typeof bannerWidget> = {
   order: 0,
   content: {
     title: "",
-    hasButton: 0,
-    buttonContent: "",
-    buttonColor: "primary",
-    buttonLink: "",
     bannerColor: "primary",
   },
 };

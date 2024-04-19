@@ -240,7 +240,6 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
     )
   }
 
-  // TODO - rework this function
   const renderBannerWidget =
   (widget: z.infer<typeof bannerWidget>, form: any, index: number) => {
     return (
@@ -274,90 +273,6 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
               </FormItem>
             )}
           />
-          {/* <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.hasButton`}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Switch
-                    {...field}
-                    id={`widgets.${index}.content.hasButton`}
-                    checked={field.value}
-                    className="mr-4"
-                    onChange={field.onChange}
-                    {...form.register(`widgets.${index}.content.hasButton`)}
-                  />
-                </FormControl>
-                <FormLabel htmlFor={`widgets.${index}.content.hasButton`} className="font-bold">
-                  Bouton
-                </FormLabel>
-              </FormItem>
-            )}
-          /> */}
-          {/* {
-            widget.content.hasButton && (
-              <>
-                <FormField 
-                  control={form.control}
-                  name={`widgets.${index}.content.buttonContent`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor={`widgets.${index}.content.buttonContent`} className="font-bold">
-                        Contenu du bouton
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          id={`widgets.${index}.content.buttonContent`}
-                          value={field.value}
-                          {...form.register(`widgets.${index}.content.buttonContent`)}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField 
-                  control={form.control}
-                  name={`widgets.${index}.content.buttonColor`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor={`widgets.${index}.content.buttonColor`} className="font-bold">
-                        Couleur du bouton
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          id={`widgets.${index}.content.buttonColor`}
-                          value={field.value}
-                          {...form.register(`widgets.${index}.content.buttonColor`)}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField 
-                  control={form.control}
-                  name={`widgets.${index}.content.buttonLink`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor={`widgets.${index}.content.buttonLink`} className="font-bold">
-                        Lien du bouton
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          id={`widgets.${index}.content.buttonLink`}
-                          value={field.value}
-                          {...form.register(`widgets.${index}.content.buttonLink`)}
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </>
-            )
-          } */}
           <FormField
               control={form.control}
               name={`widgets.${index}.content.bannerColor`}
