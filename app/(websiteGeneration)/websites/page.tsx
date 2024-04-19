@@ -13,11 +13,11 @@ export default async function Websites() {
       <Title>Mes sites web</Title>
       <ul className="flex flex-col gap-4">
         {listOfWebsites.map((website) => (
-          <li
-            key={website.uuid}
-            className="rounded-ui border border-black/10 px-8 py-4 hover:cursor-pointer hover:bg-black/5 duration-200"
-          >
-            <Link href={`/${website.uuid}`}>
+          <li key={website.uuid}>
+            <Link
+              href={`/${website.uuid}`}
+              className="rounded-ui border border-black/10 px-8 py-4 hover:cursor-pointer hover:bg-black/5 duration-200"
+            >
               {website.websiteTitle}
             </Link>
           </li>
@@ -26,9 +26,9 @@ export default async function Websites() {
         { !listOfWebsites.length && (
           <div className="flex flex-col items-center gap-4">
             <p>Vous n&apos;avez encore de site web.</p>
-            <Button>
-              <Link href="/generate">Créer mon site</Link>
-            </Button>
+            <Link href="/generate">
+              <Button>Créer mon site</Button>
+            </Link>
           </div>
         )}
       </ul>

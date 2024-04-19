@@ -47,14 +47,14 @@ export default async function Home({ params : { websiteId } }: HomeProps) {
                 </div>
               </div>
             </div>
-            <Link href={"/customization"}>
+            <Link href={`/${websiteId}/customization`}>
               <Button>Aller dans Personnalisation</Button>
             </Link>
           </div>
           <div className="flex flex-col gap-8 w-full">
             <Title tag="h2">Les pages de votre site</Title>
             <PageList pages={pages} />      
-            <Link href={"/pages"}>
+            <Link href={`/${websiteId}/pages`}>
               <Button>Aller dans Pages</Button>
             </Link>
           </div>

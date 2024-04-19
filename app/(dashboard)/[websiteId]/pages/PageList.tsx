@@ -2,13 +2,14 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@fork2e/umbrella";
 import { PAGE_NAMES } from "@/services/commons";
-import { Page } from "@/services/types";
+import { Page, UUID } from "@/services/types";
 
 export interface PageListProps {
   pages: Page[];
+  websiteId: UUID;
 }
 
-export default function PageList({ pages }: PageListProps) {
+export default function PageList({ pages, websiteId }: PageListProps) {
   return(
     <Table>
         <TableHeader>
@@ -22,7 +23,7 @@ export default function PageList({ pages }: PageListProps) {
             <TableRow
               key={page.type}
               className="cursor-pointer"
-              onClick={() => { document.location.href = `/pages/${page.uuid}` }}
+              onClick={() => { document.location.href = `/${websiteId}/pages/${page.uuid}` }}
             >
               <TableCell className="font-medium">{ PAGE_NAMES[page.type] }</TableCell>
               <TableCell>{page.isActive ? "Activée" : "Désactivée"}</TableCell>

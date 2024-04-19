@@ -7,3 +7,8 @@ export const PAGE_NAMES:Record<PageType, string> = {
   contact: 'Contact',
   legal: 'Mentions légales',
 }
+
+export const COLORS = {
+  primary: 'Primaire',
+  secondary: 'Secondaire',
+}
