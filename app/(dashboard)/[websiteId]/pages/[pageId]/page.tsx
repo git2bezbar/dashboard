@@ -16,7 +16,6 @@ export interface PagesProps {
 export default async function Pages({ params: { pageId, websiteId }}: PagesProps) {
   const cookiesList = cookies().getAll();
   const page = await getPage(websiteId, pageId, cookiesList);
-  // todo - make the update valid
   page.widgets.sort((a, b) => a.order - b.order);
 
   return (
@@ -24,7 +23,12 @@ export default async function Pages({ params: { pageId, websiteId }}: PagesProps
       <PageHeading>
         <Title>{ PAGE_NAMES[page.type] }</Title>
       </PageHeading>
-      <SinglePageComp page={page} pageId={pageId} />
+      <SinglePageComp
+        page={page}
+        pageId={pageId}
+        websiteId={websiteId}
+        cookiesList={cookiesList}  
+      />
     </> 
   )
 }

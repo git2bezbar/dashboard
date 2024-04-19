@@ -13,43 +13,41 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { updatePage } from "@/services/api/page";
 import { Page, UUID } from "@/services/types";
-import { Button, Input, Label, RadioGroup, RadioGroupItem, Switch } from "@fork2e/umbrella";
+import {
+  Button,
+  Input,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormEvent } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  bannerWidget,
+  emptyBannerWidget,
+  emptyTextImageWidget,
+  emptyTextWidget,
+  textImageWidget,
+  textWidget,
+} from "@/services/widgets";
 
 export interface SinglePageCompProps {
   page: Page;
   pageId: UUID;
+  websiteId: UUID;
+  cookiesList: any;
 }
-
-const textWidget = z.object({
-  id: z.number().optional(),
-  name: z.literal("Texte"),
-  order: z.number(),
-  content: z.object({
-    title: z.string(),
-    subtitle: z.string(),
-  }),
-});
-
-const textImageWidget = z.object({
-  id: z.number().optional(),
-  name: z.literal("Texte + Image"),
-  order: z.number(),
-  content: z.object({
-    title: z.string(),
-    subtitle: z.string(),
-    image: z.number().or(z.string()),
-    imagePosition: z.union([ z.literal("left"), z.literal("right") ]),
-    imageAlt: z.string(),
-  }),
-});
 
 const FormSchema = z.object({
   description: z.string(),
-  widgets: z.array(z.union([ textImageWidget, textWidget ])),
+  widgets: z.array(z.union([ textImageWidget, textWidget, bannerWidget ])),
   id: z.number(),
   type: z.union([
     z.literal('home'),
@@ -66,28 +64,7 @@ const FormSchema = z.object({
   updatedAt: z.string(),
 });
 
-const emptyTextWidget: z.infer<typeof textWidget> = {
-  name: "Texte",
-  order: 0,
-  content: {
-    title: "",
-    subtitle: "",
-  },
-};
-
-const emptyTextImageWidget: z.infer<typeof textImageWidget> = {
-  name: "Texte + Image",
-  order: 0,
-  content: {
-    title: "",
-    subtitle: "",
-    image: 0,
-    imagePosition: "left",
-    imageAlt: "",
-  },
-};
-
-export default function SinglePageComp({ page: providedPage, pageId }: SinglePageCompProps) {
+export default function SinglePageComp({ page: providedPage, pageId, websiteId, cookiesList }: SinglePageCompProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -263,12 +240,162 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
     )
   }
 
+  // TODO - rework this function
+  const renderBannerWidget =
+  (widget: z.infer<typeof bannerWidget>, form: any, index: number) => {
+    return (
+      <div className="flex flex-col gap-4" key={widget.id}>
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold">{ widget.name }</h3>
+          <Button
+            variant="subtle"
+            onClick={() => remove(index)}
+          >
+            Supprimer
+          </Button>
+        </div>
+        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
+          <FormField 
+            control={form.control}
+            name={`widgets.${index}.content.title`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={`widgets.${index}.content.title`} className="font-bold">
+                  Titre
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    id={`widgets.${index}.content.title`}
+                    value={field.value}
+                    {...form.register(`widgets.${index}.content.title`)}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          {/* <FormField 
+            control={form.control}
+            name={`widgets.${index}.content.hasButton`}
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Switch
+                    {...field}
+                    id={`widgets.${index}.content.hasButton`}
+                    checked={field.value}
+                    className="mr-4"
+                    onChange={field.onChange}
+                    {...form.register(`widgets.${index}.content.hasButton`)}
+                  />
+                </FormControl>
+                <FormLabel htmlFor={`widgets.${index}.content.hasButton`} className="font-bold">
+                  Bouton
+                </FormLabel>
+              </FormItem>
+            )}
+          /> */}
+          {/* {
+            widget.content.hasButton && (
+              <>
+                <FormField 
+                  control={form.control}
+                  name={`widgets.${index}.content.buttonContent`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor={`widgets.${index}.content.buttonContent`} className="font-bold">
+                        Contenu du bouton
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          id={`widgets.${index}.content.buttonContent`}
+                          value={field.value}
+                          {...form.register(`widgets.${index}.content.buttonContent`)}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField 
+                  control={form.control}
+                  name={`widgets.${index}.content.buttonColor`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor={`widgets.${index}.content.buttonColor`} className="font-bold">
+                        Couleur du bouton
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          id={`widgets.${index}.content.buttonColor`}
+                          value={field.value}
+                          {...form.register(`widgets.${index}.content.buttonColor`)}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField 
+                  control={form.control}
+                  name={`widgets.${index}.content.buttonLink`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor={`widgets.${index}.content.buttonLink`} className="font-bold">
+                        Lien du bouton
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          id={`widgets.${index}.content.buttonLink`}
+                          value={field.value}
+                          {...form.register(`widgets.${index}.content.buttonLink`)}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </>
+            )
+          } */}
+          <FormField
+              control={form.control}
+              name={`widgets.${index}.content.bannerColor`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <Label htmlFor={`widgets.${index}.content.bannerColor`} className="font-bold">
+                      Couleur de la bannière
+                    </Label>
+                  </FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-[300px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="primary">Couleur principale</SelectItem>
+                      <SelectItem value="secondary">Couleur secondaire</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+        </div>
+      </div>
+    )
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       data.widgets.map((widget: any, i) => {
         widget.order = i;
       });
-      await updatePage('1bcc2d88-43e2-47f9-a009-d7a2418604df', pageId, data);
+      await updatePage(websiteId, pageId, data, cookiesList);
       toast({
         title: "Page mise à jour ✨"
       })
@@ -308,7 +435,11 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
 
         { 
           fields.map((widget, index) => {
-            if (widget.name !== "Texte" && widget.name !== "Texte + Image") return null;
+            if (widget.name !== "Texte" && widget.name !== "Texte + Image" && widget.name !== "Bannière") return null;
+            
+            if (widget.name === "Bannière") {
+              return renderBannerWidget(widget, form, index);
+            }
 
             if (widget.name === "Texte") {
               return renderTextWidget(widget, form, index);
@@ -317,6 +448,7 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
             if (widget.name === "Texte + Image") {
               return renderTextImageWidget(widget, form, index);
             }
+
           })
         }
 
@@ -344,6 +476,15 @@ export default function SinglePageComp({ page: providedPage, pageId }: SinglePag
                     onClick={() => append({ ...emptyTextWidget })}
                   >
                     Texte
+                  </Button>
+                </DialogClose>
+                <DialogClose>
+                  <Button
+                    variant="subtle"
+                    className="p-4 rounded-ui border border-black/10"
+                    onClick={() => append({ ...emptyBannerWidget })}
+                  >
+                    Bannière
                   </Button>
                 </DialogClose>
               </DialogDescription>
