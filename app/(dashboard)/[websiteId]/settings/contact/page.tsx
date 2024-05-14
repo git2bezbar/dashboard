@@ -3,19 +3,30 @@ import PageHeading from "@/src/components/PageHeading";
 import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
 import ContactSettingsForm from "./ContactSettingsForm";
+import { UUID } from "@/services/types";
 
-export default async function ContactSettings() {
+export interface ContactSettingsProps {
+  params: { websiteId: UUID };
+}
+
+export default async function ContactSettings({ 
+  params: { websiteId }
+}: ContactSettingsProps) {
   
-  const contactSettings = await getContactSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df');
+  const contactSettings = await getContactSettings(websiteId);
 
   return (
     <>
       <PageHeading>
         <Title>Paramètres de contact</Title>
-        <Subtitle>Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper elit.</Subtitle>
+        <Subtitle>
+          Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend 
+          dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper 
+          elit.
+        </Subtitle>
       </PageHeading>
       <div className="grid grid-cols-12 items-start">
-        <ContactSettingsForm settings={contactSettings} />
+        <ContactSettingsForm settings={contactSettings} websiteId={websiteId} />
       </div>
     </> 
   )

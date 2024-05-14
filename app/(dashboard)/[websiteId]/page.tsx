@@ -9,38 +9,69 @@ import { getCustomizationSettings } from "@/services/api/customization";
 import { cookies } from "next/headers";
 import PageList from "./pages/PageList";
 import { UUID } from "@/services/types";
+import Image from "next/image";
 
 export interface HomeProps { params: { websiteId: UUID } }
 
 export default async function Home({ params : { websiteId } }: HomeProps) {
+  
   const cookiesList = cookies().getAll();
+  
   const pages = await getPages(websiteId, cookiesList);
-  const customizationSettings = await getCustomizationSettings(websiteId, cookiesList);
+  
+  const customizationSettings = 
+    await getCustomizationSettings(websiteId, cookiesList);
 
   return (
     <>
       <PageHeading>
         <Title>Rendons votre site web incroyable ! ✨</Title>
-        <Subtitle>Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper elit.</Subtitle>
+        <Subtitle>
+          Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend 
+          dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper 
+          elit.
+        </Subtitle>
       </PageHeading>
       <div className="grid grid-cols-12 items-start">
         <div className="flex flex-col items-start gap-16 col-span-5">
           <div className="flex flex-col gap-8 w-full">
             <Title tag="h2">Votre charte graphique actuelle 🎨</Title>
-            <div className="p-8 border border-black/10 rounded-[20px] flex flex-col items-center gap-8">
-              <h3 className="font-bold text-center">Titre de prévisualisation de niveau 1</h3>
+            <div
+              className="p-8 border border-black/10 rounded-[20px] flex 
+              flex-col items-center gap-8"
+            >
+              <h3 className="font-bold text-center">
+                Titre de prévisualisation de niveau 1
+              </h3>
               <div className="grid grid-cols-2 gap-8 items-center">
-                <img
+                <Image
                   src="https://via.placeholder.com/256"
                   className="rounded-ui"
                   alt="Example image"
                 />
                 <div className="flex flex-col gap-4 items-start">
                   <h4 className="font-bold text-sm">Titre de niveau 2</h4>
-                  <p className="text-sm">Ceci est un texte d&apos;exemple. Il est utilisé pour que vous puissiez avoir un rendu qui soit réaliste, <a href="#" className="font-bold" style={{color: customizationSettings.primaryColor}}>comme avec ce lien</a>, sans avoir à utiliser du texte en latin. La suite de ce paragraphe est également un exemple. Voici donc à quoi devrait ressembler votre site avec les paramètres que vous avez choisis.</p>
+                  <p className="text-sm">
+                    Ceci est un texte d&apos;exemple. Il est utilisé pour que 
+                    vous puissiez avoir un rendu qui soit réaliste, 
+                    <a 
+                      href="#" 
+                      className="font-bold" 
+                      style={{ color: customizationSettings.primaryColor }}
+                    >
+                      comme avec ce lien
+                    </a>
+                    , sans avoir à utiliser du texte en latin. La suite de ce 
+                    paragraphe est également un exemple. Voici donc à quoi 
+                    devrait ressembler votre site avec les paramètres que vous 
+                    avez choisis.
+                  </p>
                   <div
-                    className="px-8 py-4 border border-black/10 rounded-ui text-sm text-white font-bold"
-                    style={{backgroundColor: customizationSettings.primaryColor}}
+                    className="px-8 py-4 border border-black/10 rounded-ui 
+                    text-sm text-white font-bold"
+                    style={{
+                      backgroundColor: customizationSettings.primaryColor
+                    }}
                   >
                     Bouton 1
                   </div>
@@ -53,7 +84,7 @@ export default async function Home({ params : { websiteId } }: HomeProps) {
           </div>
           <div className="flex flex-col gap-8 w-full">
             <Title tag="h2">Les pages de votre site</Title>
-            <PageList pages={pages} />      
+            <PageList pages={pages} websiteId={websiteId} />      
             <Link href={`/${websiteId}/pages`}>
               <Button>Aller dans Pages</Button>
             </Link>

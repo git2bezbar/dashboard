@@ -1,15 +1,20 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel
+} from "@/src/ui/form";
+import { toast } from "@/src/ui/use-toast";
 import { authenticate } from "@/services/api/auth";
-import { AuthUser, UUID } from "@/services/types";
+import { UUID } from "@/services/types";
 import { Button, Input, Label } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { create } from "zustand";
 
 export interface LoginFormProps {
   isLogged: boolean,
@@ -21,7 +26,6 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
   const router = useRouter();
 
   if (isLogged && websiteId) {
-    console.log(websiteId);
     router.push(`/${websiteId}`);
   } else if (isLogged) {
     router.push("/generate");

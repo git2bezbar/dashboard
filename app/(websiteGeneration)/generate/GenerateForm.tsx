@@ -1,7 +1,13 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
+import { toast } from "@/src/ui/use-toast";
 import { generateWebsite } from "@/services/api/website";
 import Title from "@/src/components/Title";
 import { Button, Input, Label } from "@fork2e/umbrella";

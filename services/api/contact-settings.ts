@@ -8,9 +8,11 @@ import { ContactSettings, UUID } from "../types";
  * await getContactSettings(uuid);
  * ```
  */
+
 export const getContactSettings = async (
-  uuid: UUID,
-):Promise<ContactSettings> => await ky.get(`http://localhost:3333/${uuid}/contact-settings`).json();
+  uuid: UUID
+): Promise<ContactSettings> =>
+  await ky.get(`http://localhost:3333/${uuid}/contact-settings`).json();
 
 /**
  *
@@ -20,7 +22,11 @@ export const getContactSettings = async (
  * await updateContactSettings(uuid, updatedContactSettings);
  * ```
  */
+
 export const updateContactSettings = async (
   uuid: UUID,
   updatedContactSettings: ContactSettings,
-) => await ky.post(`http://localhost:3333/${uuid}/contact-settings`, { json: updatedContactSettings}).json();
+) =>
+  await ky.post(`http://localhost:3333/${uuid}/contact-settings`, {
+    json: updatedContactSettings
+  }).json();

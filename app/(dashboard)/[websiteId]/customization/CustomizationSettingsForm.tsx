@@ -1,11 +1,16 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
 import { updateCustomizationSettings } from "@/services/api/customization";
-import { CustomizationSettings } from "@/services/types";
+import { CustomizationSettings, UUID } from "@/services/types";
 import {
   Button,
-  Input,
   Label,
   RadioGroup,
   RadioGroupItem,
@@ -19,11 +24,12 @@ import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
-import { Color } from "@/components/ui/color";
+import { useToast } from "@/src/ui/use-toast";
+import { Color } from "@/src/ui/color";
 
 export interface CustomizationSettingsFormProps {
   settings: CustomizationSettings;
+  websiteId: UUID;
 }
 
 const FormSchema = z.object({
@@ -37,7 +43,10 @@ const FormSchema = z.object({
   footerLayout: z.string(),
 });
 
-export default function CustomizationSettingsForm({ settings: providedSettings }:CustomizationSettingsFormProps) {
+export default function CustomizationSettingsForm({
+  settings: providedSettings,
+  websiteId,
+}: CustomizationSettingsFormProps) {
 
   const { toast } = useToast();
 
@@ -50,13 +59,14 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
  
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await updateCustomizationSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df', data);
+      await updateCustomizationSettings(websiteId, data);
       toast({
         title: "Paramètres de personnalisation mis à jour ✨"
       })
     } catch (error) {
       toast({
-        title: "Oups, les paramètres de personnalisation n'ont pas pu être mis à jour 😢",
+        title: "Oups, les paramètres de personnalisation n'ont pas pu être " + 
+        "mis à jour 😢",
         variant: "destructive"
       })
     }
@@ -152,7 +162,9 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
           />
           </div>
           <div className="flex flex-col justify-start items-start gap-4">
-            <Label className="font-bold" htmlFor="primaryColor">Couleur principale</Label>
+            <Label className="font-bold" htmlFor="primaryColor">
+              Couleur principale
+            </Label>
             <FormField
               control={form.control}
               name="primaryColor"
@@ -166,7 +178,9 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
             />
           </div>
           <div className="flex flex-col items-start gap-4">
-            <Label className="font-bold" htmlFor="secondaryColor">Couleur secondaire</Label>
+            <Label className="font-bold" htmlFor="secondaryColor">
+              Couleur secondaire
+            </Label>
             <FormField
               control={form.control}
               name="secondaryColor"
@@ -222,7 +236,9 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
                   >
                     <FormControl>
                       <SelectTrigger className="w-[300px]">
-                        <SelectValue placeholder="Choisissez la police des textes" />
+                        <SelectValue
+                          placeholder="Choisissez la police des textes"
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -250,7 +266,9 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
                   >
                     <FormControl>
                       <SelectTrigger className="w-[300px]">
-                        <SelectValue placeholder="Choisissez la police des textes" />
+                        <SelectValue
+                          placeholder="Choisissez la police des textes"
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -311,8 +329,19 @@ export default function CustomizationSettingsForm({ settings: providedSettings }
           </div>
         </div>
         <div className="flex gap-4">
-          <Button disabled={!form.formState.isDirty} type="submit">Sauvegarder les changements</Button>
-          <Button disabled={!form.formState.isDirty} variant="subtle" onClick={resetSettings}>Annuler</Button>
+          <Button
+            disabled={!form.formState.isDirty}
+            type="submit"
+          >
+            Sauvegarder les changements
+          </Button>
+          <Button
+            disabled={!form.formState.isDirty}
+            variant="subtle"
+            onClick={resetSettings}
+          >
+            Annuler
+          </Button>
         </div>
       </form>
     </Form>

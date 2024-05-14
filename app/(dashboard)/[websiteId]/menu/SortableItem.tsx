@@ -1,6 +1,12 @@
 import { DraggableSyntheticListeners, UniqueIdentifier } from "@dnd-kit/core"
 import { useSortable } from "@dnd-kit/sortable";
-import { CSSProperties, PropsWithChildren, createContext, useContext, useMemo } from "react";
+import {
+  CSSProperties,
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useMemo,
+} from "react";
 import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
@@ -20,6 +26,7 @@ const SortableItemContext = createContext<Context>({
 });
 
 export function SortableItem({ children, id }: PropsWithChildren<Props>) {
+
   const {
     attributes,
     isDragging,
@@ -29,6 +36,7 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
     transform,
     transition
   } = useSortable({ id });
+
   const context = useMemo(
     () => ({
       attributes,
@@ -37,6 +45,7 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
     }),
     [attributes, listeners, setActivatorNodeRef]
   );
+
   const style: CSSProperties = {
     opacity: isDragging ? 0.4 : undefined,
     transform: CSS.Translate.toString(transform),
@@ -48,7 +57,8 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
       <li
         ref={setNodeRef}
         style={style}
-        className="flex justify-between items-center p-4 rounded-ui border border-black/10 bg-white min-w-60 touch-none"
+        className="flex justify-between items-center p-4 rounded-ui border 
+        border-black/10 bg-white min-w-60 touch-none"
       >
         {children}
       </li>

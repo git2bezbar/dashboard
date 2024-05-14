@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import '../globals.css'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'Forkee | Connexion',
@@ -14,12 +15,15 @@ export default function LoginLayout({
   return (
     <html>
       <body className="grid grid-cols-dashboard font-raleway relative">
-      <aside className="sticky top-0 bg-black text-white p-12 h-screen flex flex-col justify-between items-end">
-        <img src="/logo-icon-white.svg"/>
-        <img src="/logo-icon-white.svg"/>
+      <aside
+        className="sticky top-0 bg-black text-white p-12 h-screen flex 
+          flex-col justify-between items-end"
+      >
+        <Image src="/logo-icon-white.svg" alt="Forkee white star" />
+        <Image src="/logo-icon-white.svg" alt="Forkee white star" />
       </aside>
         <main className="flex flex-col justify-center p-16 gap-16">
-          <img src="/logo.svg" width={100}/>
+          <Image src="/logo.svg" alt="Forkee logo" width={100}/>
           <div className=" flex flex-col gap-8">
             {children}
           </div>
