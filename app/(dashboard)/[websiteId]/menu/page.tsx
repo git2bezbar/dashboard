@@ -9,18 +9,25 @@ import { cookies } from "next/headers";
 export interface MenuProps { params: { websiteId: UUID } }
 
 export default async function Menu({ params : { websiteId } }: MenuProps) {
+  
   const cookiesList = cookies().getAll();
+  
   const pages = await getMenu(websiteId, cookiesList);
+  
   pages.sort((a, b) => a.order - b.order);
+  
   const handleMenuUpdate = async (updatedMenu: MenuPage[]) => {
     "use server"
     const updatedPages = await updateMenu(websiteId, updatedMenu, cookiesList);
   }
+  
   return (
     <>
       <PageHeading>
         <Title>Menu</Title>
-        <Subtitle>Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper elit.</Subtitle>
+        <Subtitle>Cras elementum mi a libero sagittis sollicitudin. Quisque 
+          eleifend dapibus justo, sed euismod ipsum hendrerit non. Donec mollis 
+          semper elit.</Subtitle>
       </PageHeading>
 
       <div className="grid grid-cols-12 items-start">

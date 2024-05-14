@@ -5,7 +5,9 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 
 export default async function Websites() {
+  
   const cookiesList = cookies().getAll();
+  
   const listOfWebsites = await getWebsites(cookiesList);
   
   return (
@@ -16,7 +18,8 @@ export default async function Websites() {
           <li key={website.uuid}>
             <Link
               href={`/${website.uuid}`}
-              className="rounded-ui border border-black/10 px-8 py-4 hover:cursor-pointer hover:bg-black/5 duration-200"
+              className="rounded-ui border border-black/10 px-8 py-4 
+                hover:cursor-pointer hover:bg-black/5 duration-200"
             >
               {website.websiteTitle}
             </Link>

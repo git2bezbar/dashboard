@@ -14,8 +14,11 @@ export interface PagesProps {
 }
 
 export default async function Pages({ params: { pageId, websiteId }}: PagesProps) {
+  
   const cookiesList = cookies().getAll();
+  
   const page = await getPage(websiteId, pageId, cookiesList);
+  
   page.widgets.sort((a, b) => a.order - b.order);
 
   return (

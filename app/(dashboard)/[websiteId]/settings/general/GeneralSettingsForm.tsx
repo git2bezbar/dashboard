@@ -1,10 +1,24 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { toast } from "@/components/ui/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
+import { toast } from "@/src/ui/use-toast";
 import { updateGeneralSettings } from "@/services/api/general-settings";
-import { GeneralSettings } from "@/services/types";
-import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch } from "@fork2e/umbrella";
+import { GeneralSettings, UUID } from "@/services/types";
+import {
+  Button,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormEvent } from "react";
 import { useForm } from "react-hook-form";
@@ -12,6 +26,7 @@ import { z } from "zod";
 
 export interface GeneralSettingsFormProps {
   settings: GeneralSettings;
+  websiteId: UUID;
 }
 
 function generateTimeSlots(): string[] {
@@ -50,8 +65,12 @@ const FormSchema = z.object({
   ),
 });
 
-export default function GeneralSettingsForm({ settings: providedSettings }: GeneralSettingsFormProps) {
-    const form = useForm<z.infer<typeof FormSchema>>({
+export default function GeneralSettingsForm({
+  settings: providedSettings,
+  websiteId,
+}: GeneralSettingsFormProps) {
+
+  const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       ...providedSettings,
@@ -60,13 +79,14 @@ export default function GeneralSettingsForm({ settings: providedSettings }: Gene
   
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await updateGeneralSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df', data);
+      await updateGeneralSettings(websiteId, data);
       toast({
         title: "Paramètres de contact mis à jour ✨"
       })
     } catch (error) {
       toast({
-        title: "Oups, les paramètres de contact n'ont pas pu être mis à jour 😢",
+        title: "Oups, les paramètres de contact n'ont pas pu être " +
+        "mis à jour 😢",
         variant: "destructive"
       })
     }
@@ -188,7 +208,9 @@ export default function GeneralSettingsForm({ settings: providedSettings }: Gene
                   <FormItem className="flex flex-col items-start gap-4">
                     {
                       timeSlot.slotNumber === 1 ? (
-                        <h3 className="text-sm font-bold">{timeSlot.dayOfWeek}</h3>
+                        <h3 className="text-sm font-bold">
+                          {timeSlot.dayOfWeek}
+                        </h3>
                       ) : null
                     }
                     {
@@ -200,7 +222,11 @@ export default function GeneralSettingsForm({ settings: providedSettings }: Gene
                       <Select
                         value={field.value.openingTime}
                         onValueChange={(e) => {
-                          form.setValue(`timeSlots.${index}.openingTime`, e, { shouldDirty: true, shouldValidate: true })
+                          form.setValue(
+                            `timeSlots.${index}.openingTime`,
+                            e,
+                            { shouldDirty: true, shouldValidate: true }
+                          )
                         }}
                       >
                         <FormControl>
@@ -221,13 +247,18 @@ export default function GeneralSettingsForm({ settings: providedSettings }: Gene
                       <Select
                         value={field.value.closingTime}
                         onValueChange={(e) => { 
-                          form.setValue(`timeSlots.${index}.closingTime`, e, { shouldDirty: true, shouldValidate: true })
+                          form.setValue(
+                            `timeSlots.${index}.closingTime`,
+                            e,
+                            { shouldDirty: true, shouldValidate: true }
+                          )
                         }}
                       >
                         <FormControl>
                           <SelectTrigger className="w-[300px]">
                             <SelectValue
-                              placeholder="Choisissez votre horaire de fermeture" 
+                              placeholder="Choisissez votre horaire de 
+                              fermeture" 
                             />
                           </SelectTrigger>
                         </FormControl>
@@ -246,8 +277,16 @@ export default function GeneralSettingsForm({ settings: providedSettings }: Gene
             ))
           }
         <div className="flex gap-4">
-          <Button disabled={!form.formState.isDirty} type="submit">Sauvegarder les changements</Button>
-          <Button disabled={!form.formState.isDirty} variant="subtle" onClick={resetSettings}>Annuler</Button>
+          <Button disabled={!form.formState.isDirty} type="submit">
+            Sauvegarder les changements
+          </Button>
+          <Button
+            disabled={!form.formState.isDirty}
+            variant="subtle"
+            onClick={resetSettings}
+          >
+            Annuler
+          </Button>
         </div>
       </form>
     </Form>

@@ -1,6 +1,12 @@
 "use client";
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
 import {
   Dialog,
   DialogClose,
@@ -9,8 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { toast } from "@/components/ui/use-toast";
+} from "@/src/ui/dialog"
+import { toast } from "@/src/ui/use-toast";
 import { updatePage } from "@/services/api/page";
 import { Page, UUID } from "@/services/types";
 import {
@@ -49,7 +55,12 @@ export interface SinglePageCompProps {
 
 const FormSchema = z.object({
   description: z.string(),
-  widgets: z.array(z.union([ textImageWidget, textWidget, bannerWidget, videoWidget ])),
+  widgets: z.array(z.union([
+    textImageWidget,
+    textWidget,
+    bannerWidget,
+    videoWidget
+  ])),
   id: z.number(),
   type: z.union([
     z.literal('home'),
@@ -66,7 +77,12 @@ const FormSchema = z.object({
   updatedAt: z.string(),
 });
 
-export default function SinglePageComp({ page: providedPage, pageId, websiteId, cookiesList }: SinglePageCompProps) {
+export default function SinglePageComp({
+  page: providedPage,
+  pageId,
+  websiteId,
+  cookiesList
+}: SinglePageCompProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -93,13 +109,18 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             Supprimer
           </Button>
         </div>
-        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
+        <div
+          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
+        >
           <FormField 
             control={form.control}
             name={`widgets.${index}.content.title`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.title`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.title`}
+                  className="font-bold"
+                >
                   Titre
                 </FormLabel>
                 <FormControl>
@@ -118,7 +139,10 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             name={`widgets.${index}.content.subtitle`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.subtitle`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.subtitle`}
+                  className="font-bold"
+                >
                   Sous-titre
                 </FormLabel>
                 <FormControl>
@@ -150,13 +174,18 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             Supprimer
           </Button>
         </div>
-        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
+        <div
+          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
+        >
           <FormField 
             control={form.control}
             name={`widgets.${index}.content.title`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.title`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.title`}
+                  className="font-bold"
+                >
                   Titre
                 </FormLabel>
                 <FormControl>
@@ -173,7 +202,10 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             name={`widgets.${index}.content.subtitle`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.subtitle`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.subtitle`}
+                  className="font-bold"
+                >
                   Sous-titre
                 </FormLabel>
                 <FormControl>
@@ -190,7 +222,10 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             name={`widgets.${index}.content.imagePosition`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.imagePosition`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.imagePosition`}
+                  className="font-bold"
+                >
                   Position de l&apos;image
                 </FormLabel>
                 <FormControl>
@@ -225,7 +260,10 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             name={`widgets.${index}.content.imageAlt`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.imageAlt`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.imageAlt`}
+                  className="font-bold"
+                >
                   Description de l&apos;image
                 </FormLabel>
                 <FormControl>
@@ -255,13 +293,18 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             Supprimer
           </Button>
         </div>
-        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
+        <div
+          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
+        >
           <FormField 
             control={form.control}
             name={`widgets.${index}.content.title`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.title`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.title`}
+                  className="font-bold"
+                >
                   Titre
                 </FormLabel>
                 <FormControl>
@@ -281,7 +324,10 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <Label htmlFor={`widgets.${index}.content.bannerColor`} className="font-bold">
+                    <Label
+                      htmlFor={`widgets.${index}.content.bannerColor`}
+                      className="font-bold"
+                    >
                       Couleur de la bannière
                     </Label>
                   </FormLabel>
@@ -295,8 +341,12 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="primary">Couleur principale</SelectItem>
-                      <SelectItem value="secondary">Couleur secondaire</SelectItem>
+                      <SelectItem value="primary">
+                        Couleur principale
+                      </SelectItem>
+                      <SelectItem value="secondary">
+                        Couleur secondaire
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -320,13 +370,18 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             Supprimer
           </Button>
         </div>
-        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
+        <div
+          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
+        >
           <FormField 
             control={form.control}
             name={`widgets.${index}.content.title`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.title`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.title`}
+                  className="font-bold"
+                >
                   Titre
                 </FormLabel>
                 <FormControl>
@@ -345,7 +400,10 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
             name={`widgets.${index}.content.video`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor={`widgets.${index}.content.video`} className="font-bold">
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.video`}
+                  className="font-bold"
+                >
                   Lien de la vidéo
                 </FormLabel>
                 <FormControl>
@@ -474,8 +532,16 @@ export default function SinglePageComp({ page: providedPage, pageId, websiteId, 
         </Dialog>
         
         <div className="flex gap-4">
-          <Button disabled={!form.formState.isDirty} type="submit">Sauvegarder les changements</Button>
-          <Button disabled={!form.formState.isDirty} variant="subtle" onClick={resetSettings}>Annuler</Button>
+          <Button disabled={!form.formState.isDirty} type="submit">
+            Sauvegarder les changements
+          </Button>
+          <Button
+            disabled={!form.formState.isDirty}
+            variant="subtle"
+            onClick={resetSettings}
+          >
+            Annuler
+          </Button>
         </div>
       </form>
     </Form>

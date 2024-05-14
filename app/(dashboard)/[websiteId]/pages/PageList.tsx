@@ -1,6 +1,13 @@
 'use client';
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@fork2e/umbrella";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@fork2e/umbrella";
 import { PAGE_NAMES } from "@/services/commons";
 import { Page, UUID } from "@/services/types";
 
@@ -23,9 +30,13 @@ export default function PageList({ pages, websiteId }: PageListProps) {
             <TableRow
               key={page.type}
               className="cursor-pointer"
-              onClick={() => { document.location.href = `/${websiteId}/pages/${page.uuid}` }}
+              onClick={() => { 
+                document.location.href = `/${websiteId}/pages/${page.uuid}` 
+              }}
             >
-              <TableCell className="font-medium">{ PAGE_NAMES[page.type] }</TableCell>
+              <TableCell className="font-medium">
+                { PAGE_NAMES[page.type] }
+              </TableCell>
               <TableCell>{page.isActive ? "Activée" : "Désactivée"}</TableCell>
             </TableRow>
           ))}

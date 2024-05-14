@@ -1,17 +1,24 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ContactSettings } from "@/services/types";
+import { ContactSettings as ContactSettingsType, UUID } from "@/services/types";
 import { updateContactSettings } from "@/services/api/contact-settings";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/src/ui/use-toast";
 import { Button, Input, Switch } from "@fork2e/umbrella";
 import { FormEvent } from "react";
 
 export interface ContactSettingsFormProps {
-  settings: ContactSettings;
+  settings: ContactSettingsType;
+  websiteId: UUID;
 }
 
 const FormSchema = z.object({
@@ -24,7 +31,10 @@ const FormSchema = z.object({
   }))
 });
 
-export default function ContactSettings({ settings: providedSettings }: ContactSettingsFormProps) {
+export default function ContactSettings({
+  settings: providedSettings,
+  websiteId,
+}: ContactSettingsFormProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -35,7 +45,7 @@ export default function ContactSettings({ settings: providedSettings }: ContactS
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await updateContactSettings('1bcc2d88-43e2-47f9-a009-d7a2418604df', data);
+      await updateContactSettings(websiteId, data);
       toast({
         title: "Paramètres de contact mis à jour ✨"
       })
@@ -96,10 +106,30 @@ export default function ContactSettings({ settings: providedSettings }: ContactS
                 render={({ field }) => (
                   <FormItem className="flex items-center gap-8">
                     <FormControl>
-                      <Input id={`socialLink${index}`} value={field.value.url} onChange={(e) => { form.setValue(`socialLinks.${index}.url`, e.target.value, { shouldDirty: true, shouldValidate: true })}} />
+                      <Input
+                        id={`socialLink${index}`}
+                        value={field.value.url}
+                        onChange={(e) => { 
+                          form.setValue(
+                            `socialLinks.${index}.url`,
+                            e.target.value,
+                            { shouldDirty: true, shouldValidate: true }
+                          )
+                        }}
+                      />
                     </FormControl>
                     <FormControl>
-                      <Switch id={`socialLinkSwitch${index}`} checked={field.value.is_active as boolean} onCheckedChange={(e) => { form.setValue(`socialLinks.${index}.is_active`, !field.value.is_active, { shouldDirty: true, shouldValidate: true }) }}/>
+                      <Switch
+                        id={`socialLinkSwitch${index}`}
+                        checked={field.value.is_active as boolean}
+                        onCheckedChange={(e) => {
+                          form.setValue(
+                            `socialLinks.${index}.is_active`,
+                            !field.value.is_active,
+                            { shouldDirty: true, shouldValidate: true }
+                          )
+                        }}
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -107,8 +137,16 @@ export default function ContactSettings({ settings: providedSettings }: ContactS
             ))
           }
         <div className="flex gap-4">
-          <Button disabled={!form.formState.isDirty} type="submit">Sauvegarder les changements</Button>
-          <Button disabled={!form.formState.isDirty} variant="subtle" onClick={resetSettings}>Annuler</Button>
+          <Button disabled={!form.formState.isDirty} type="submit">
+            Sauvegarder les changements
+          </Button>
+          <Button
+            disabled={!form.formState.isDirty}
+            variant="subtle"
+            onClick={resetSettings}
+          >
+            Annuler
+          </Button>
         </div>
       </form>
     </Form>
