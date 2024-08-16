@@ -3,14 +3,14 @@ import { UniqueIdentifier } from "@dnd-kit/core";
 export type UUID = string;
 
 export interface CustomizationSettings {
-  headerLayout: string;
-  theme: string;
+  // headerLayout: string;
+  // theme: string;
   primaryColor: string;
   secondaryColor: string;
-  titleFont: string;
+  // titleFont: string;
   textFont: string;
-  buttonFont: string;
-  footerLayout: string;
+  // buttonFont: string;
+  // footerLayout: string;
 }
 
 export type PageType = "home" | "about" | "menu" | "contact" | "legal";
@@ -65,15 +65,21 @@ export interface TimeSlot {
   closingTime: string;
   dayOfWeek: string;
   slotNumber: number;
+  isActive: boolean | number
 }
 
 export interface GeneralSettings {
   websiteTitle: string;
   websiteHeadline: string;
-  websiteLogo: string;
-  websiteFavicon: string;
+  // websiteLogo: string;
+  // websiteFavicon: string;
   street: string;
   city: string;
   postCode: string;
   timeSlots: TimeSlot[];
+}
+
+export interface AccountInfo {
+  lastname: string;
+  firstname: string;
 }
