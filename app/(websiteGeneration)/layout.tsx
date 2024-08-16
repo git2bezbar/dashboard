@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Dashboard Forkee.',
 }
 
-export default async function LoginLayout({ children }: { children: React.ReactNode }) {
+export default async function WebsiteGenerationLayout({ children }: { children: React.ReactNode }) {
   
   const cookiesList = cookies().getAll();
   
@@ -23,7 +23,12 @@ export default async function LoginLayout({ children }: { children: React.ReactN
           min-h-screen p-16 gap-16"
       >
       <AuthChecker isLogged={isLogged} cookiesList={cookiesList}>
-        <Image src="/logo.svg" alt="Forkee logo" width={100}/>
+        <Image
+          src="/logo.svg"
+          alt="Forkee logo"
+          width={100}
+          height={50}
+        />
         <div className=" flex flex-col gap-8">{children}</div>
       </AuthChecker>
       </body>
