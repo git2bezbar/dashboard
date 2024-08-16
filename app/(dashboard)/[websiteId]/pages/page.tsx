@@ -20,9 +20,9 @@ export default async function Pages({ params: { websiteId } }:PagesProps) {
       <PageHeading>
         <Title>Pages</Title>
         <Subtitle>
-          Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend 
-          dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper 
-          elit.
+          C’est ici que vous avez une liste de toutes les pages qui sont sur votre site web. 
+          En cliquant sur l’une des lignes du tableau vous pourrez gérer le contenu de la page en question. 
+          Pour gérer la visibilité de cette page, rendez-vous sur la page Menu.
         </Subtitle>
       </PageHeading>
       <PageList pages={pages} websiteId={websiteId} />      
