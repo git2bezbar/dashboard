@@ -13,13 +13,13 @@ export const getContactSettings = async (
   cookies: any
 ): Promise<ContactSettings> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/contact-settings`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -44,14 +44,14 @@ export const updateContactSettings = async (
   cookies: any
 ) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/contact-settings`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
     body: JSON.stringify(updatedContactSettings),
-    credentials: 'include',
+    credentials: "include",
   });
 
   if (!response.ok) {

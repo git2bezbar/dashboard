@@ -6,16 +6,16 @@ export interface SidebarItemProps extends ComponentPropsWithoutRef<"div"> {
   link: string;
 }
 
-export default function SidebarItem({
+export default function SidebarItem ({
   children,
   isCurrentPage,
-  link
+  link,
 }:SidebarItemProps) {
-  return(
+  return (
     <li className={`flex gap-4 rounded-ui duration-300 ${ isCurrentPage ? "bg-white hover:bg-whiteDark text-black font-bold" : "hover:bg-hoveredSidebarItems"}`}>
       <Link className="w-full p-4" href={link}>
         { children }
       </Link>
     </li>
-  )
+  );
 }

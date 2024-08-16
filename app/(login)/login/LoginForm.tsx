@@ -1,20 +1,21 @@
-'use client';
+"use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel
-} from "@/src/ui/form";
-import { toast } from "@/src/ui/use-toast";
-import { authenticate } from "@/services/api/auth";
-import { UUID } from "@/services/types";
 import { Button, Input, Label } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { UUID } from "@/services/types";
+import { authenticate } from "@/services/api/auth";
+import { toast } from "@/src/ui/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
 
 export interface LoginFormProps {
   isLogged: boolean,
@@ -22,7 +23,7 @@ export interface LoginFormProps {
 }
 export interface CookiesCheckerState { cookiesList: any }
 
-export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
+export default function LoginForm ({ isLogged, websiteId }: LoginFormProps) {
   const router = useRouter();
 
   if (isLogged && websiteId) {
@@ -34,7 +35,7 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
   const FormSchema = z.object({
     email: z.string(),
     password: z.string(),
-  })
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -42,10 +43,11 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
       email: "",
       password: "",
     },
-  })
+  });
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit (data: z.infer<typeof FormSchema>) {
     const { email, password } = data;
+
     try {
       await authenticate(email, password);
       router.push("/websites");
@@ -54,7 +56,7 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
         title: "Erreur de connexion",
         description: "Identifiants incorrects",
         variant: "destructive",
-      })    
+      });
     }
   }
 
@@ -93,5 +95,5 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
         <Button type="submit" className="self-start">Se connecter</Button>
       </form>
     </Form>
-    )
+  );
 }

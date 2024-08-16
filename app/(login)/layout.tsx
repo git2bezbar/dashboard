@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import '../globals.css'
-import Image from 'next/image'
+import { Metadata } from "next";
+import "../globals.css";
+import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: 'Forkee | Connexion',
-  description: 'Dashboard Forkee.',
-}
+  title: "Forkee | Connexion",
+  description: "Dashboard Forkee.",
+};
 
-export default function LoginLayout({
+export default function LoginLayout ({
   children,
 }: {
   children: React.ReactNode
@@ -16,7 +16,7 @@ export default function LoginLayout({
     <html>
       <body className="grid grid-cols-dashboard font-raleway relative">
         <aside
-          className="sticky top-0 bg-black text-white p-12 h-screen flex 
+          className="sticky top-0 bg-black text-white p-12 h-screen flex
             flex-col justify-between items-end"
         >
           <Image
@@ -45,5 +45,5 @@ export default function LoginLayout({
         </main>
       </body>
     </html>
-  )
+  );
 }

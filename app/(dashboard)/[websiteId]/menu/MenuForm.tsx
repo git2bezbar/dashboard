@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { PAGE_NAMES } from "@/services/commons";
-import { MenuPage } from "@/services/types";
 import { Button, Label, Switch } from "@fork2e/umbrella";
 import { DndContext, closestCorners } from "@dnd-kit/core";
 import { FormEventHandler, useEffect, useState } from "react";
+
+import { MenuPage } from "@/services/types";
+import { PAGE_NAMES } from "@/services/commons";
+
 import SortableList from "./SortableList";
 
 export interface MenuFormProps {
@@ -12,27 +14,29 @@ export interface MenuFormProps {
   handleMenuUpdate(updatedMenu: MenuPage[]): void;
 }
 
-export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
-  
+export default function MenuForm ({ pages, handleMenuUpdate }: MenuFormProps) {
+
   const [menuPages, menuPagesOrder] = useState<MenuPage[]>(pages);
-  
+
   const changeIsActive = (id: string) => {
-    const newPages = menuPages.map((page) => {
-      if (page.id === id) { return { ...page, isActive: !page.isActive } }
+    const newPages = menuPages.map(page => {
+      if (page.id === id) { return { ...page, isActive: !page.isActive }; }
+
       return page;
     });
     menuPagesOrder(newPages);
-  }
+  };
 
   const [hasSaved, setHasSaved] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  
+
   useEffect(() => {
     menuPages.map((page, index) => {
       if (page.order !== index) {
         const newPages = menuPages.map((p, i) => {
-          if (p.id === page.id) { return { ...p, order: i } }
+          if (p.id === page.id) { return { ...p, order: i }; }
+
           return p;
         });
         menuPagesOrder(newPages);
@@ -41,7 +45,7 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
     setIsDirty(JSON.stringify(menuPages) !== JSON.stringify(pages));
   }, [menuPages, pages]);
 
-  const handleSubmit: FormEventHandler<HTMLButtonElement> = (e) => {
+  const handleSubmit: FormEventHandler<HTMLButtonElement> = e => {
     try {
       handleMenuUpdate(menuPages);
       setHasSaved(true);
@@ -63,33 +67,33 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
         Choisissez l’ordre et la visibilité de vos pages dans le header
       </h2>
       <div className="flex flex-col items-start gap-16">
-      <DndContext collisionDetection={closestCorners}>
-        <SortableList
-          items={menuPages}
-          onChange={menuPagesOrder}
-          renderItem={(item) => (
-            <SortableList.Item id={item.id}>
-              <div className="flex items-center gap-4 w-full">
-                <SortableList.DragHandle />
-                <Label
-                  className="cursor-pointer w-full"
-                  htmlFor={item.type}
-                >
-                  {PAGE_NAMES[item.type]}
-                </Label>
-              </div>
-              <Switch
-                id={item.type}
-                onClick={() => changeIsActive(item.id as string)}
-                checked={item.isActive}
-              />
-            </SortableList.Item>
-          )}
+        <DndContext collisionDetection={closestCorners}>
+          <SortableList
+            items={menuPages}
+            onChange={menuPagesOrder}
+            renderItem={item => (
+              <SortableList.Item id={item.id}>
+                <div className="flex items-center gap-4 w-full">
+                  <SortableList.DragHandle />
+                  <Label
+                    className="cursor-pointer w-full"
+                    htmlFor={item.type}
+                  >
+                    {PAGE_NAMES[item.type]}
+                  </Label>
+                </div>
+                <Switch
+                  id={item.type}
+                  onClick={() => changeIsActive(item.id as string)}
+                  checked={item.isActive}
+                />
+              </SortableList.Item>
+            )}
           />
-      </DndContext>
-      <Button onClick={handleSubmit} disabled={!isDirty}>
+        </DndContext>
+        <Button onClick={handleSubmit} disabled={!isDirty}>
         Sauvegarder les changements
-      </Button>
+        </Button>
       </div>
 
       {
@@ -108,5 +112,5 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
         )
       }
     </div>
-  )
+  );
 }

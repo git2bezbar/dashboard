@@ -1,12 +1,12 @@
-import { Label } from "@fork2e/umbrella"
+import { Label } from "@fork2e/umbrella";
 
-export interface ColorProps  {
+export interface ColorProps {
   currentColor?: string;
   disabled?: boolean;
 }
 
 const Color = ({ currentColor, disabled, ...props }:ColorProps) => {
-  return(
+  return (
     <>
       <Label htmlFor="color" className={`relative min-w-[300px] ${disabled ? "pointer-events-none cursor-not-allowed" : ""}`}>
         <input
@@ -28,8 +28,9 @@ const Color = ({ currentColor, disabled, ...props }:ColorProps) => {
         />
       </Label>
     </>
-  )
-}
-Color.displayName = "Color"
+  );
+};
 
-export { Color }
+Color.displayName = "Color";
+
+export { Color };

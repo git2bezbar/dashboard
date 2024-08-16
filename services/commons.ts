@@ -1,14 +1,14 @@
 import { PageType } from "./types";
 
 export const PAGE_NAMES:Record<PageType, string> = {
-  home: 'Accueil',
-  about: 'À propos',
-  menu: 'Menu',
-  contact: 'Contact',
-  legal: 'Mentions légales',
-}
+  home: "Accueil",
+  about: "À propos",
+  menu: "Menu",
+  contact: "Contact",
+  legal: "Mentions légales",
+};
 
 export const COLORS = {
-  primary: 'Primaire',
-  secondary: 'Secondaire',
-}
+  primary: "Primaire",
+  secondary: "Secondaire",
+};

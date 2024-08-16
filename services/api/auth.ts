@@ -11,12 +11,12 @@ export const authenticate = async (
   password: string,
 ): Promise<{ isLogged: boolean }> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ email, password }),
   });
 
   if (!response.ok) {
@@ -36,11 +36,11 @@ export const authenticate = async (
 
 export const checkAuthentication = async (cookies: any): Promise<boolean> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
   });
 
@@ -50,7 +50,6 @@ export const checkAuthentication = async (cookies: any): Promise<boolean> => {
 
   return await response.json();
 };
-
 
 /**
  * Disconnect the user.
@@ -62,7 +61,7 @@ export const checkAuthentication = async (cookies: any): Promise<boolean> => {
 
 export const disconnect = async (): Promise<void> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-    method: 'POST'
+    method: "POST",
   });
 
   if (!response.ok) {

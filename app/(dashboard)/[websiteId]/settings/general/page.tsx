@@ -1,24 +1,26 @@
+import { cookies } from "next/headers";
+
 import PageHeading from "@/src/components/PageHeading";
 import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
-import GeneralSettingsForm from "./GeneralSettingsForm";
 import { getGeneralSettings } from "@/services/api/general-settings";
 import { UUID } from "@/services/types";
-import { cookies } from "next/headers";
+
+import GeneralSettingsForm from "./GeneralSettingsForm";
 
 export interface GeneralSettingsProps {
   params: { websiteId: UUID };
 }
 
-export default async function GeneralSettings({ 
-  params: { websiteId }
+export default async function GeneralSettings ({
+  params: { websiteId },
 }: GeneralSettingsProps) {
 
   const cookiesList = cookies().getAll();
-  
+
   const generalSettings = await getGeneralSettings(websiteId, cookiesList);
-  
-    return (
+
+  return (
     <>
       <PageHeading>
         <Title>Paramètres généraux</Title>
@@ -33,6 +35,6 @@ export default async function GeneralSettings({
           cookiesList={cookiesList}
         />
       </div>
-    </> 
-  )
+    </>
+  );
 }

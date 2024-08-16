@@ -13,12 +13,12 @@ export const getPages = async (
   cookies: any,
 ): Promise<Page[]> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/pages`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -27,7 +27,6 @@ export const getPages = async (
 
   return await response.json();
 };
-
 
 /**
  * Provides the content of a page for a given website.
@@ -43,21 +42,20 @@ export const getPage = async (
   cookies: any,
 ): Promise<Page> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/pages/${pageUuid}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  
+
   return await response.json();
 };
-
 
 /**
  *
@@ -75,14 +73,14 @@ export const updatePage = async (
   cookies: any,
 ): Promise<Page> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/pages/${pageUuid}`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    body: JSON.stringify(updatedPage)
+    body: JSON.stringify(updatedPage),
   });
 
   if (!response.ok) {

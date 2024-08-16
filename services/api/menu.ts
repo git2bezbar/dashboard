@@ -13,12 +13,12 @@ export const getMenu = async (
   cookies: any,
 ): Promise<MenuPage[]> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/menu`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -27,7 +27,6 @@ export const getMenu = async (
 
   return await response.json();
 };
-
 
 /**
  *
@@ -44,14 +43,14 @@ export const updateMenu = async (
   cookies: any,
 ) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/menu`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
     body: JSON.stringify(updatedMenu),
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {

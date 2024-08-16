@@ -13,12 +13,12 @@ export const getCustomizationSettings = async (
   cookies: any,
 ): Promise<CustomizationSettings> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/customization`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -27,7 +27,6 @@ export const getCustomizationSettings = async (
 
   return await response.json();
 };
-
 
 /**
  * Updates the customization settings for a given website.
@@ -41,21 +40,21 @@ export const updateCustomizationSettings = async (
   uuid: string,
   updatedCustomizationSettings: CustomizationSettings,
   cookies: any,
-) => {  
+) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/customization`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
     body: JSON.stringify(updatedCustomizationSettings),
-    credentials: 'include'
+    credentials: "include",
   });
-    
+
   if (!response.ok) {
     throw new Error(`Failed to update customization settings: ${response.statusText}`);
   }
-  
+
   return await response.json();
 };

@@ -1,14 +1,5 @@
-'use client';
+"use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/src/ui/form";
-import { updateGeneralSettings } from "@/services/api/general-settings";
-import { GeneralSettings, UUID } from "@/services/types";
 import {
   Button,
   Input,
@@ -24,25 +15,35 @@ import { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { GeneralSettings, UUID } from "@/services/types";
+import { updateGeneralSettings } from "@/services/api/general-settings";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
+
 export interface GeneralSettingsFormProps {
   settings: GeneralSettings;
   websiteId: UUID;
   cookiesList: any;
 }
 
-function generateTimeSlots(): string[] {
+function generateTimeSlots (): string[] {
   const timeSlots: string[] = [];
-  
+
   for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-          const formattedHour = hour.toString().padStart(2, '0');
-          const formattedMinute = minute.toString().padStart(2, '0');
-          const timeSlot = `${formattedHour}:${formattedMinute}`;
-          
-          timeSlots.push(timeSlot);
-      }
+    for (let minute = 0; minute < 60; minute += 30) {
+      const formattedHour = hour.toString().padStart(2, "0");
+      const formattedMinute = minute.toString().padStart(2, "0");
+      const timeSlot = `${formattedHour}:${formattedMinute}`;
+
+      timeSlots.push(timeSlot);
+    }
   }
-  
+
   return timeSlots;
 }
 
@@ -67,7 +68,7 @@ const FormSchema = z.object({
   ),
 });
 
-export default function GeneralSettingsForm({
+export default function GeneralSettingsForm ({
   settings: providedSettings,
   websiteId,
   cookiesList,
@@ -83,8 +84,7 @@ export default function GeneralSettingsForm({
   const [hasSaved, setHasSaved] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
 
-  
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit (data: z.infer<typeof FormSchema>) {
     try {
       await updateGeneralSettings(websiteId, data, cookiesList);
       setHasSaved(true);
@@ -232,14 +232,14 @@ export default function GeneralSettingsForm({
                           <Switch
                             id={`socialLinkSwitch${index}`}
                             checked={field.value.isActive as boolean}
-                            onCheckedChange={(e) => {
+                            onCheckedChange={e => {
                               const newIsActive = !field.value.isActive;
 
                               const daySlots = providedSettings.timeSlots.filter(
-                                (slot) => slot.dayOfWeek === timeSlot.dayOfWeek
+                                slot => slot.dayOfWeek === timeSlot.dayOfWeek
                               );
 
-                              daySlots.forEach((slot) => {
+                              daySlots.forEach(slot => {
                                 const slotIndex = providedSettings.timeSlots.indexOf(slot);
                                 form.setValue(
                                   `timeSlots.${slotIndex}.isActive`,
@@ -257,25 +257,25 @@ export default function GeneralSettingsForm({
                     field.value.isActive ? (
                       <>
                         {
-                          timeSlot.slotNumber === 1 
+                          timeSlot.slotNumber === 1
                             ? <h3 className="text-xs font-bold">Matin</h3>
                             : <h3 className="text-xs font-bold">Après-midi</h3>
                         }
                         <div className="flex gap-4">
                           <Select
                             value={field.value.openingTime}
-                            onValueChange={(e) => {
+                            onValueChange={e => {
                               form.setValue(
                                 `timeSlots.${index}.openingTime`,
                                 e,
                                 { shouldDirty: true, shouldValidate: true }
-                              )
+                              );
                             }}
                           >
                             <FormControl>
                               <SelectTrigger className="w-[300px]">
                                 <SelectValue
-                                  placeholder="Choisissez votre horaire d'ouverture" 
+                                  placeholder="Choisissez votre horaire d'ouverture"
                                 />
                               </SelectTrigger>
                             </FormControl>
@@ -291,19 +291,19 @@ export default function GeneralSettingsForm({
                           </Select>
                           <Select
                             value={field.value.closingTime}
-                            onValueChange={(e) => { 
+                            onValueChange={e => {
                               form.setValue(
                                 `timeSlots.${index}.closingTime`,
                                 e,
                                 { shouldDirty: true, shouldValidate: true }
-                              )
+                              );
                             }}
                           >
                             <FormControl>
                               <SelectTrigger className="w-[300px]">
                                 <SelectValue
-                                  placeholder="Choisissez votre horaire de 
-                                  fermeture" 
+                                  placeholder="Choisissez votre horaire de
+                                  fermeture"
                                 />
                               </SelectTrigger>
                             </FormControl>
@@ -355,5 +355,5 @@ export default function GeneralSettingsForm({
         }
       </form>
     </Form>
-  )
+  );
 }

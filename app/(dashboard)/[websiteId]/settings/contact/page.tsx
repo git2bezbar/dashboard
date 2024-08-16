@@ -1,21 +1,23 @@
+import { cookies } from "next/headers";
+
 import { getContactSettings } from "@/services/api/contact-settings";
 import PageHeading from "@/src/components/PageHeading";
 import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
-import ContactSettingsForm from "./ContactSettingsForm";
 import { UUID } from "@/services/types";
-import { cookies } from "next/headers";
+
+import ContactSettingsForm from "./ContactSettingsForm";
 
 export interface ContactSettingsProps {
   params: { websiteId: UUID };
 }
 
-export default async function ContactSettings({ 
-  params: { websiteId }
+export default async function ContactSettings ({
+  params: { websiteId },
 }: ContactSettingsProps) {
 
   const cookiesList = cookies().getAll();
-  
+
   const contactSettings = await getContactSettings(websiteId, cookiesList);
 
   return (
@@ -33,6 +35,6 @@ export default async function ContactSettings({
           cookiesList={cookiesList}
         />
       </div>
-    </> 
-  )
+    </>
+  );
 }

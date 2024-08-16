@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Active,
@@ -8,13 +8,14 @@ import {
   UniqueIdentifier,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
+} from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { Fragment, ReactNode, useMemo, useState } from "react";
+
 import SortableOverlay from "./SortableOverlay";
 import { DragHandle, SortableItem } from "./SortableItem";
 
@@ -28,23 +29,23 @@ interface SortableListProps<T extends BaseItem> {
   renderItem(item: T): ReactNode;
 }
 
-export default function SortableList<T extends BaseItem>({
+export default function SortableList<T extends BaseItem> ({
   items,
   onChange,
   renderItem,
 }: SortableListProps<T>) {
 
-  const [active, setActive] = useState<Active | null>(null)
-  
+  const [active, setActive] = useState<Active | null>(null);
+
   const activeItem = useMemo(
-    () => items.find((item) => item.id === active?.id),
+    () => items.find(item => item.id === active?.id),
     [active, items]
-  )
-  
+  );
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
+      coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
@@ -61,6 +62,7 @@ export default function SortableList<T extends BaseItem>({
 
           onChange(arrayMove(items, activeIndex, overIndex));
         }
+
         setActive(null);
       }}
       onDragCancel={() => {
@@ -69,7 +71,7 @@ export default function SortableList<T extends BaseItem>({
     >
       <SortableContext items={items}>
         <ul className="flex flex-col max-w-[360px] gap-4" role="application">
-          {items.map((item) => (
+          {items.map(item => (
             <Fragment key={item.id}>{renderItem(item)}</Fragment>
           ))}
         </ul>
@@ -78,7 +80,7 @@ export default function SortableList<T extends BaseItem>({
         {activeItem ? renderItem(activeItem) : null}
       </SortableOverlay>
     </DndContext>
-  )
+  );
 }
 
 SortableList.Item = SortableItem;

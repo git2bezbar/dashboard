@@ -10,12 +10,12 @@ import { AccountInfo, User } from "../types";
 
 export const getAccountInfo = async (cookies: any): Promise<User> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
-    }
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
+    },
   });
 
   if (!response.ok) {
@@ -24,7 +24,6 @@ export const getAccountInfo = async (cookies: any): Promise<User> => {
 
   return await response.json();
 };
-
 
 /**
  * Updates the user account information.
@@ -36,19 +35,19 @@ export const getAccountInfo = async (cookies: any): Promise<User> => {
 
 export const updateAccountInfo = async (
   updatedAccountInfo: AccountInfo,
-  cookies: any, 
+  cookies: any,
 ) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-  },
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
+    },
     body: JSON.stringify(updatedAccountInfo),
-    credentials: 'include',
+    credentials: "include",
   });
-  
+
   if (!response.ok) {
     throw new Error(`Failed to update account info: ${response.statusText}`);
   }

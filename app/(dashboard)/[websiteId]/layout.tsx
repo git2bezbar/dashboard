@@ -1,28 +1,31 @@
 import Sidebar from "@/src/components/Sidebar";
-import AccountMenu from '@/src/components/AccountMenu';
+import AccountMenu from "@/src/components/AccountMenu";
 import { Toaster } from "@/src/ui/toaster";
-import '@fork2e/umbrella/dist/lib.min.css';
+import "@fork2e/umbrella/dist/lib.min.css";
 
 import { cookies } from "next/headers";
+
 import { checkAuthentication } from "@/services/api/auth";
+
 import { Metadata } from "next";
+
 import { getAccountInfo } from "@/services/api/account";
 import AuthChecker from "@/src/components/AuthChecker";
 import { UUID } from "@/services/types";
 
 export const metadata: Metadata = {
-  title: 'Forkee | Dashboard',
-  description: 'Dashboard Forkee.',
-}
+  title: "Forkee | Dashboard",
+  description: "Dashboard Forkee.",
+};
 
-export interface RootLayoutProps { 
+export interface RootLayoutProps {
   children: React.ReactNode
   params: { websiteId: UUID }
 }
 
-export default async function RootLayout({
+export default async function RootLayout ({
   children,
-  params: { websiteId }
+  params: { websiteId },
 }: RootLayoutProps) {
 
   const cookiesList = cookies().getAll();
@@ -36,7 +39,7 @@ export default async function RootLayout({
     cookies().getAll().forEach(cookie => {
       cookies().delete(cookie.name);
     });
-  }
+  };
 
   return (
     <html lang="fr">
@@ -49,7 +52,7 @@ export default async function RootLayout({
           <Sidebar websiteId={websiteId} />
           <main className="flex flex-col">
             <div
-              className="flex items-center justify-end px-8 py-6 border-b 
+              className="flex items-center justify-end px-8 py-6 border-b
               border-b-black/10"
             >
               <AccountMenu
@@ -65,5 +68,5 @@ export default async function RootLayout({
         </AuthChecker>
       </body>
     </html>
-  )
+  );
 }

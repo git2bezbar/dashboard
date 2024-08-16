@@ -1,7 +1,8 @@
-import { User } from '@/services/types';
-import { create } from 'zustand';
+import { create } from "zustand";
 
-const useStore = create((set) => ({
+import { User } from "@/services/types";
+
+const useStore = create(set => ({
   userInfo: {},
   setUserInfo: (userInfo: User) => set({ userInfo }),
 }));

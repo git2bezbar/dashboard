@@ -12,12 +12,12 @@ export const generateWebsite = async (
   email: string
 ): Promise<{ uuid: string }> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ websiteTitle, email })
+    body: JSON.stringify({ websiteTitle, email }),
   });
 
   if (!response.ok) {
@@ -26,7 +26,6 @@ export const generateWebsite = async (
 
   return await response.json();
 };
-
 
 /**
  *
@@ -41,12 +40,12 @@ export const getWebsite = async (
   cookies: any
 ): Promise<{ uuid: string }> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/website`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
-    }
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
+    },
   });
 
   if (!response.ok) {
@@ -55,7 +54,6 @@ export const getWebsite = async (
 
   return await response.json();
 };
-
 
 /**
  *
@@ -70,12 +68,12 @@ export const getWebsites = async (
   cookies: any
 ): Promise<any[]> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/websites`, {
-    method: 'GET',
-    credentials: 'include',
+    method: "GET",
+    credentials: "include",
     headers: {
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; ')
-    }
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
+    },
   });
 
   if (!response.ok) {

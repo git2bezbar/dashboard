@@ -1,15 +1,6 @@
 "use client";
 
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/src/ui/form";
-import { getPages, updatePage } from "@/services/api/page";
-import { Page, UUID } from "@/services/types";
-import {
   Button,
   Input,
   Select,
@@ -23,6 +14,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormEvent, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { Page, UUID } from "@/services/types";
+import { getPages, updatePage } from "@/services/api/page";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
 import { emptyTextWidget, textWidget } from "@/services/widgets";
 import { PAGE_NAMES } from "@/services/commons";
 
@@ -39,11 +40,11 @@ const FormSchema = z.object({
   widgets: z.array(textWidget),
   id: z.number(),
   type: z.union([
-    z.literal('home'),
-    z.literal('about'),
-    z.literal('menu'),
-    z.literal('contact'),
-    z.literal('legal'),
+    z.literal("home"),
+    z.literal("about"),
+    z.literal("menu"),
+    z.literal("contact"),
+    z.literal("legal"),
   ]),
   order: z.number(),
   isActive: z.boolean().or(z.number().int().min(0).max(1)),
@@ -53,12 +54,12 @@ const FormSchema = z.object({
   updatedAt: z.string(),
 });
 
-export default function SinglePageComp({
+export default function SinglePageComp ({
   page: providedPage,
   pageId,
   websiteId,
   menuPages,
-  cookiesList
+  cookiesList,
 }: SinglePageCompProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -66,20 +67,20 @@ export default function SinglePageComp({
     defaultValues: {
       ...providedPage,
     },
-  })
+  });
 
   const [hasSaved, setHasSaved] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'widgets',
+    name: "widgets",
   });
 
-  const renderTextWidget = 
+  const renderTextWidget =
   (widget: z.infer<typeof textWidget>, form: any, index: number) => {
     const errors = form.formState.errors;
-  
+
     return (
       <div className="flex flex-col gap-4" key={widget.id}>
         <div className="flex items-center justify-between">
@@ -92,7 +93,7 @@ export default function SinglePageComp({
           }
         </div>
         <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
-          <FormField 
+          <FormField
             control={form.control}
             name={`widgets.${index}.content.title`}
             render={({ field }) => (
@@ -121,7 +122,7 @@ export default function SinglePageComp({
               </FormItem>
             )}
           />
-          <FormField 
+          <FormField
             control={form.control}
             name={`widgets.${index}.content.subtitle`}
             render={({ field }) => (
@@ -150,7 +151,7 @@ export default function SinglePageComp({
               </FormItem>
             )}
           />
-          <FormField 
+          <FormField
             control={form.control}
             name={`widgets.${index}.content.hasButton`}
             render={({ field }) => (
@@ -165,13 +166,13 @@ export default function SinglePageComp({
                   <Switch
                     id={`widgets.${index}.content.hasButton`}
                     checked={field.value as boolean}
-                    onCheckedChange={(e) => {
-                      console.log('malafak', !field.value);
+                    onCheckedChange={e => {
+                      console.log("malafak", !field.value);
                       form.setValue(
                         `widgets.${index}.content.hasButton`,
                         !field.value,
                         { shouldDirty: true, shouldValidate: true }
-                      )
+                      );
                     }}
                   />
                 </FormControl>
@@ -182,7 +183,7 @@ export default function SinglePageComp({
           {
             form.watch(`widgets.${index}.content.hasButton`) ? (
               <>
-                <FormField 
+                <FormField
                   control={form.control}
                   name={`widgets.${index}.content.buttonContent`}
                   render={({ field }) => (
@@ -211,7 +212,7 @@ export default function SinglePageComp({
                     </FormItem>
                   )}
                 />
-                <FormField 
+                <FormField
                   control={form.control}
                   name={`widgets.${index}.content.buttonLink`}
                   render={({ field }) => (
@@ -236,7 +237,7 @@ export default function SinglePageComp({
                           </FormControl>
                           <SelectContent>
                             {
-                              menuPages.map((page) => (
+                              menuPages.map(page => (
                                 <SelectItem key={page.id} value={page.type}>
                                   { PAGE_NAMES[page.type] }
                                 </SelectItem>
@@ -250,13 +251,13 @@ export default function SinglePageComp({
                 />
               </>
             ) : null
-          }          
+          }
         </div>
       </div>
-    )
-  }
-  
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    );
+  };
+
+  async function onSubmit (data: z.infer<typeof FormSchema>) {
     try {
       data.widgets.map((widget: any, i) => {
         widget.order = i;
@@ -274,7 +275,7 @@ export default function SinglePageComp({
       }, 3000);
     }
   }
-  
+
   const resetSettings = (e: FormEvent) => {
     e.preventDefault();
     form.reset();
@@ -291,7 +292,7 @@ export default function SinglePageComp({
         className="col-span-5 flex flex-col gap-8"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <FormField 
+        <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
@@ -307,14 +308,14 @@ export default function SinglePageComp({
         />
 
         { fields.map((widget, index) => renderTextWidget(widget, form, index)) }
-                
+
         <Button
           size="fullWidth"
           onClick={() => append({ ...emptyTextWidget })}
         >
           Ajouter une zone texte
         </Button>
-        
+
         <div className="flex gap-4">
           <Button disabled={!form.formState.isDirty} type="submit">
             Sauvegarder les changements
@@ -345,5 +346,5 @@ export default function SinglePageComp({
         }
       </form>
     </Form>
-  )
+  );
 }

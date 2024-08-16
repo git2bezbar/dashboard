@@ -10,10 +10,11 @@ export const textWidget = z.object({
     hasButton: z.boolean(),
     buttonContent: z.string().optional(),
     buttonLink: z.string().optional(),
-  }).refine((data) => {
+  }).refine(data => {
     if (data.hasButton && !data.buttonContent && !data.buttonLink) {
       return false;
     }
+
     return true;
   }, {
     message: "Le contenu et le lien du bouton est requis",
@@ -32,7 +33,6 @@ export const menuWidget = z.object({
     })),
   }),
 });
-
 
 // Empty widgets
 

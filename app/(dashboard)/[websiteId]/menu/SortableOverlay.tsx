@@ -9,14 +9,14 @@ const dropAnimationConfig: DropAnimation = {
   sideEffects: defaultDropAnimationSideEffects({
     styles: {
       active: {
-        opacity: "0.4"
-      }
-    }
-  })
+        opacity: "0.4",
+      },
+    },
+  }),
 };
 
-export default function SortableOverlay({ children }:PropsWithChildren<{}>) {
+export default function SortableOverlay ({ children }:PropsWithChildren<{}>) {
   return (
     <DragOverlay dropAnimation={dropAnimationConfig}>{children}</DragOverlay>
-  )
+  );
 }

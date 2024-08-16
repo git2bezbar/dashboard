@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import SidebarItem from "./SidebarItem";
-import { UUID } from "@/services/types";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+
+import { UUID } from "@/services/types";
+
+import SidebarItem from "./SidebarItem";
 
 export interface SidebarProps {
   websiteId: UUID;
 }
 
-export default function Sidebar({ websiteId }: SidebarProps) {
-  
+export default function Sidebar ({ websiteId }: SidebarProps) {
+
   const pathname = usePathname();
 
   return (
@@ -65,5 +67,5 @@ export default function Sidebar({ websiteId }: SidebarProps) {
         </ul>
       </nav>
     </header>
-  )
+  );
 }

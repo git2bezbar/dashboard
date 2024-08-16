@@ -1,14 +1,5 @@
-'use client';
+"use client";
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/src/ui/form";
-import { updateCustomizationSettings } from "@/services/api/customization";
-import { CustomizationSettings, UUID } from "@/services/types";
 import {
   Button,
   Label,
@@ -16,12 +7,22 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@fork2e/umbrella";
 import { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { CustomizationSettings, UUID } from "@/services/types";
+import { updateCustomizationSettings } from "@/services/api/customization";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/src/ui/form";
 import { Color } from "@/src/ui/color";
 
 export interface CustomizationSettingsFormProps {
@@ -36,7 +37,7 @@ const FormSchema = z.object({
   textFont: z.string(),
 });
 
-export default function CustomizationSettingsForm({
+export default function CustomizationSettingsForm ({
   settings: providedSettings,
   websiteId,
   cookiesList,
@@ -47,12 +48,12 @@ export default function CustomizationSettingsForm({
     defaultValues: {
       ...providedSettings,
     },
-  })
+  });
 
   const [hasSaved, setHasSaved] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
- 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+
+  async function onSubmit (data: z.infer<typeof FormSchema>) {
     try {
       await updateCustomizationSettings(websiteId, data, cookiesList);
       setHasSaved(true);
@@ -161,7 +162,7 @@ export default function CustomizationSettingsForm({
             Annuler
           </Button>
         </div>
-        
+
         {
           hasSaved && (
             <p className="font-bold bg-success self-start px-8 py-4 rounded-ui">
@@ -179,5 +180,5 @@ export default function CustomizationSettingsForm({
         }
       </form>
     </Form>
-  )
+  );
 }

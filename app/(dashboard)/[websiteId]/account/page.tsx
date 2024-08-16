@@ -1,16 +1,17 @@
+import { cookies } from "next/headers";
+
 import PageHeading from "@/src/components/PageHeading";
 import Subtitle from "@/src/components/Subtitle";
 import Title from "@/src/components/Title";
-import AccountForm from "./AccountForm";
-import { cookies } from "next/headers";
 import { getAccountInfo } from "@/services/api/account";
 
-export default async function Account() {
-    
+import AccountForm from "./AccountForm";
+
+export default async function Account () {
+
   const cookiesList = cookies().getAll();
-  
-  const customizationSettings = 
-    await getAccountInfo(cookiesList);
+
+  const customizationSettings = await getAccountInfo(cookiesList);
 
   return (
     <>
@@ -26,6 +27,6 @@ export default async function Account() {
           cookiesList={cookiesList}
         />
       </div>
-    </> 
-  )
+    </>
+  );
 }

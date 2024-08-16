@@ -13,13 +13,13 @@ export const getGeneralSettings = async (
   cookies: any
 ): Promise<GeneralSettings> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/general-settings`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -28,7 +28,6 @@ export const getGeneralSettings = async (
 
   return await response.json();
 };
-
 
 /**
  *
@@ -45,14 +44,14 @@ export const updateGeneralSettings = async (
   cookies: any
 ) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/general-settings`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
+      "Content-Type": "application/json",
+      Cookie: cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join("; "),
     },
     body: JSON.stringify(updatedGeneralSettings),
-    credentials: 'include',
+    credentials: "include",
   });
 
   if (!response.ok) {

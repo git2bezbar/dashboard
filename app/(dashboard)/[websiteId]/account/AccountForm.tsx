@@ -1,10 +1,11 @@
-'use client'
+"use client";
 
-import { updateAccountInfo } from "@/services/api/account";
 import { Button, Input } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import {
   Form,
   FormControl,
@@ -12,9 +13,8 @@ import {
   FormItem,
   FormLabel,
 } from "@/src/ui/form";
-import { z } from "zod";
+import { updateAccountInfo } from "@/services/api/account";
 import { AccountInfo } from "@/services/types";
-
 
 export interface AccountFormProps {
   settings: AccountInfo;
@@ -26,7 +26,7 @@ const FormSchema = z.object({
   firstname: z.string(),
 });
 
-export default function AccountForm({
+export default function AccountForm ({
   settings: providedSettings,
   cookiesList,
 }: AccountFormProps) {
@@ -36,13 +36,13 @@ export default function AccountForm({
     defaultValues: {
       ...providedSettings,
     },
-  })
-  
+  });
+
   const [hasSaved, setHasSaved] = useState(false);
   const [hasFailed, setHasFailed] = useState(false);
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("malafak")
+  async function onSubmit (data: z.infer<typeof FormSchema>) {
+
     try {
       await updateAccountInfo(data, cookiesList);
       setHasSaved(true);
@@ -97,7 +97,7 @@ export default function AccountForm({
             </FormItem>
           )}
         />
-        
+
         <div className="flex gap-4">
           <Button
             disabled={!form.formState.isDirty}
@@ -113,7 +113,7 @@ export default function AccountForm({
             Annuler
           </Button>
         </div>
-        
+
         {
           hasSaved && (
             <p className="font-bold bg-success self-start px-8 py-4 rounded-ui">

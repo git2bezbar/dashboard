@@ -1,18 +1,19 @@
-'use client';
-import { disconnect } from "@/services/api/auth";
-import { UUID } from "@/services/types";
-import useStore from "@/store/userInfoStore";
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+import useStore from "@/store/userInfoStore";
+import { UUID } from "@/services/types";
+import { disconnect } from "@/services/api/auth";
 
 export interface AccountMenuProps {
   deleteCookies: () => void
   websiteId: UUID
 }
 
-export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuProps) {
+export default function AccountMenu ({ deleteCookies, websiteId }: AccountMenuProps) {
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const dropdownMenuRef = useRef<HTMLUListElement>(null);
@@ -20,16 +21,17 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
 
   useEffect(() => {
     const closeMenuOnPseudoBlur = (event: MouseEvent) => {
-      if (dropdownRef.current 
-        && (!dropdownRef.current.contains(event.target as Node)) 
-        && !dropdownMenuRef?.current?.contains(event.target as Node)) {
+      if (dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        !dropdownMenuRef?.current?.contains(event.target as Node)) {
         setIsMenuOpened(false);
       }
-    }
-    document.addEventListener('mousedown', closeMenuOnPseudoBlur);
+    };
+
+    document.addEventListener("mousedown", closeMenuOnPseudoBlur);
 
     return () => {
-      document.removeEventListener('mousedown', closeMenuOnPseudoBlur);
+      document.removeEventListener("mousedown", closeMenuOnPseudoBlur);
     };
   }, [dropdownRef]);
 
@@ -45,7 +47,7 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
     <div
       ref={dropdownRef}
       className="rounded-ui flex items-center px-4 py-3 bg-primary gap-6 relative duration-200 hover:cursor-pointer hover:bg-primaryDark"
-      onClick={() => {setIsMenuOpened(!isMenuOpened)}}
+      onClick={() => { setIsMenuOpened(!isMenuOpened); }}
     >
       <Image
         className="rounded-full ring-2 ring-white/30"
@@ -66,13 +68,13 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
         height="24px"
         viewBox="0 0 24 24"
       >
-        <g transform="translate(6.000000, 7.000000)" fill="#FFF"  fillRule="nonzero">
+        <g transform="translate(6.000000, 7.000000)" fill="#FFF" fillRule="nonzero">
           <path d="M4.869,9.63078422 C4.811,9.57428154 4.563,9.36093522 4.359,9.16220166 C3.076,7.99707745 0.976,4.95762299 0.335,3.36678032 C0.232,3.12518266 0.014,2.51436922 0,2.18801754 C0,1.87530443 0.072,1.57720409 0.218,1.29274233 C0.422,0.938139308 0.743,0.653677545 1.122,0.497808086 C1.385,0.397467121 2.172,0.241597662 2.186,0.241597662 C3.047,0.0857282026 4.446,0 5.992,0 C7.465,0 8.807,0.0857282026 9.681,0.213346322 C9.695,0.227959084 10.673,0.383828544 11.008,0.554310765 C11.62,0.867023868 12,1.47783731 12,2.13151486 L12,2.18801754 C11.985,2.613736 11.605,3.5090112 11.591,3.5090112 C10.949,5.01412567 8.952,7.98343887 7.625,9.17681442 C7.625,9.17681442 7.284,9.51290794 7.071,9.65903556 C6.765,9.88699464 6.386,10 6.007,10 C5.584,10 5.19,9.87238188 4.869,9.63078422"></path>
         </g>
       </svg>
       {
         isMenuOpened && (
-          <ul ref={dropdownMenuRef} className={`absolute bg-white bottom-0 left-0 right-0 flex flex-col translate-y-[110%] border-2 border-black/20 rounded-ui`}>
+          <ul ref={dropdownMenuRef} className={"absolute bg-white bottom-0 left-0 right-0 flex flex-col translate-y-[110%] border-2 border-black/20 rounded-ui"}>
             <li className="duration-300 hover:bg-whiteDark">
               <Link className="flex items-center gap-4 px-4 py-3" href={`/${websiteId}/account`}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,5 +95,5 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
         )
       }
     </div>
-  )
+  );
 }
