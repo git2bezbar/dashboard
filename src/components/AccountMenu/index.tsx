@@ -2,6 +2,7 @@
 import { disconnect } from "@/services/api/auth";
 import { UUID } from "@/services/types";
 import useStore from "@/store/userInfoStore";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from "react";
@@ -36,8 +37,8 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
 
   const logoutMethod = async () => {
     await disconnect();
-    await deleteCookies();
     router.push("/login");
+    deleteCookies();
   };
 
   return (
@@ -46,7 +47,7 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
       className="rounded-ui flex items-center px-4 py-3 bg-primary gap-6 relative duration-200 hover:cursor-pointer hover:bg-primaryDark"
       onClick={() => {setIsMenuOpened(!isMenuOpened)}}
     >
-      <img
+      <Image
         className="rounded-full ring-2 ring-white/30"
         src="/profile_picture.jpg"
         alt="AD Schwarzer"
@@ -54,9 +55,9 @@ export default function AccountMenu({ deleteCookies, websiteId }: AccountMenuPro
         width={32}
       />
       <div className="flex flex-col items-start text-white">
-        <p className="font-bold">{ userInfo.firstname ? userInfo.firstname : userInfo.username } { userInfo.lastname && userInfo.lastname }</p>
-        { userInfo.firstname && (
-          <p className="text-xs">{ userInfo.username }</p>
+        <p className="font-bold">{ userInfo?.firstname ? userInfo?.firstname : userInfo?.username } { userInfo?.lastname && userInfo?.lastname }</p>
+        { userInfo?.firstname && (
+          <p className="text-xs">{ userInfo?.username }</p>
         ) }
       </div>
       <svg
