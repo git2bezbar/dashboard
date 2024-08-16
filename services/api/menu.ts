@@ -1,5 +1,4 @@
-import ky from "ky";
-import { MenuPage, UUID } from "../types";
+import { MenuPage } from "../types";
 
 /**
  * Provides the menu for a given website.
@@ -10,15 +9,25 @@ import { MenuPage, UUID } from "../types";
  */
 
 export const getMenu = async (
-  uuid: UUID,
+  uuid: string,
   cookies: any,
-): Promise<MenuPage[]> =>
-  await ky.get(`http://localhost:3333/${uuid}/menu`, {
+): Promise<MenuPage[]> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/menu`, {
+    method: 'GET',
     headers: {
-      'Cookie': cookies.map((cookie: any) => 
-        `${cookie.name}=${cookie.value}`).join('; '),
-    }
-  }).json();
+      'Cookie': cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join('; ')
+    },
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
 
 /**
  *
@@ -30,14 +39,24 @@ export const getMenu = async (
  */
 
 export const updateMenu = async (
-  uuid: UUID,
+  uuid: string,
   updatedMenu: MenuPage[],
   cookies: any,
-) =>
-  await ky.post(`http://localhost:3333/${uuid}/menu`, {
-    json: updatedMenu,
+) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/menu`, {
+    method: 'POST',
     headers: {
-      'Cookie': cookies.map((cookie: any) => 
+      'Content-Type': 'application/json',
+      'Cookie': cookies.map((cookie: any) =>
         `${cookie.name}=${cookie.value}`).join('; '),
-    }
-  }).json();
+    },
+    body: JSON.stringify(updatedMenu),
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update menu: ${response.statusText}`);
+  }
+
+  return await response.json();
+};

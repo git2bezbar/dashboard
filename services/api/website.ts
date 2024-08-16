@@ -1,5 +1,3 @@
-import ky from "ky";
-
 /**
  *
  * Generates a website.
@@ -11,12 +9,24 @@ import ky from "ky";
 
 export const generateWebsite = async (
   websiteTitle: string,
-  email: string,
-): Promise<{ uuid: string }> =>
-  await ky.post(`http://localhost:3333/generate`, {
-    json: { websiteTitle, email },
+  email: string
+): Promise<{ uuid: string }> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/generate`, {
+    method: 'POST',
     credentials: 'include',
-  }).json();
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ websiteTitle, email })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
 
 /**
  *
@@ -28,15 +38,24 @@ export const generateWebsite = async (
  */
 
 export const getWebsite = async (
-  cookies: any,
-): Promise<{ uuid: string }> =>
-  await ky.get(`http://localhost:3333/website`, {
+  cookies: any
+): Promise<{ uuid: string }> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/website`, {
+    method: 'GET',
     credentials: 'include',
     headers: {
       'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-    },
-  }).json();
+        `${cookie.name}=${cookie.value}`).join('; ')
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
 
 /**
  *
@@ -48,12 +67,20 @@ export const getWebsite = async (
  */
 
 export const getWebsites = async (
-  cookies: any,
-): Promise<any[]> =>
-  await ky.get(`http://localhost:3333/websites`, {
+  cookies: any
+): Promise<any[]> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/websites`, {
+    method: 'GET',
     credentials: 'include',
     headers: {
       'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-    },
-  }).json();
+        `${cookie.name}=${cookie.value}`).join('; ')
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};

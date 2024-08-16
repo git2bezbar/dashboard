@@ -1,5 +1,4 @@
-import ky from "ky";
-import { GeneralSettings, UUID } from "../types";
+import { GeneralSettings } from "../types";
 
 /**
  * Provides the general settings for a given website.
@@ -10,9 +9,26 @@ import { GeneralSettings, UUID } from "../types";
  */
 
 export const getGeneralSettings = async (
-  uuid: UUID,
-): Promise<GeneralSettings> =>
-  await ky.get(`http://localhost:3333/${uuid}/general-settings`).json();
+  uuid: string,
+  cookies: any
+): Promise<GeneralSettings> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/general-settings`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join('; '),
+    },
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to get general settings: ${response.statusText}`);
+  }
+
+  return await response.json();
+};
+
 
 /**
  *
@@ -24,9 +40,24 @@ export const getGeneralSettings = async (
  */
 
 export const updateGeneralSettings = async (
-  uuid: UUID,
+  uuid: string,
   updatedGeneralSettings: GeneralSettings,
-) => 
-  await ky.post(`http://localhost:3333/${uuid}/general-settings`, {
-    json: updatedGeneralSettings
-  }).json();
+  cookies: any
+) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/general-settings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join('; '),
+    },
+    body: JSON.stringify(updatedGeneralSettings),
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to update general settings: ${response.statusText}`);
+  }
+
+  return await response.json();
+};

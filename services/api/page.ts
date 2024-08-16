@@ -1,5 +1,4 @@
-import ky from "ky";
-import { Page, UUID } from "../types";
+import { Page } from "../types";
 
 /**
  * Provides a list of pages for a given website.
@@ -10,15 +9,25 @@ import { Page, UUID } from "../types";
  */
 
 export const getPages = async (
-  uuid: UUID,
+  uuid: string,
   cookies: any,
-): Promise<Page[]> => 
-  await ky.get(`http://localhost:3333/${uuid}/pages`, { 
+): Promise<Page[]> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/pages`, {
+    method: 'GET',
     headers: {
       'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-    }
-  }).json();
+        `${cookie.name}=${cookie.value}`).join('; ')
+    },
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
 
 /**
  * Provides the content of a page for a given website.
@@ -29,16 +38,26 @@ export const getPages = async (
  */
 
 export const getPage = async (
-  uuid: UUID,
-  pageUuid: UUID,
+  uuid: string,
+  pageUuid: string,
   cookies: any,
-): Promise<Page> =>
-  await ky.get(`http://localhost:3333/${uuid}/pages/${pageUuid}`, {
+): Promise<Page> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/pages/${pageUuid}`, {
+    method: 'GET',
     headers: {
       'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-    }
-  }).json();
+        `${cookie.name}=${cookie.value}`).join('; ')
+    },
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  
+  return await response.json();
+};
+
 
 /**
  *
@@ -50,16 +69,25 @@ export const getPage = async (
  */
 
 export const updatePage = async (
-  uuid: UUID,
-  pageUuid: UUID,
+  uuid: string,
+  pageUuid: string,
   updatedPage: Page,
   cookies: any,
-) =>
-  await ky.post(`http://localhost:3333/${uuid}/pages/${pageUuid}`, {
-    json: updatedPage,
+): Promise<Page> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/pages/${pageUuid}`, {
+    method: 'POST',
     credentials: 'include',
     headers: {
+      'Content-Type': 'application/json',
       'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-    }
-  }).json();
+        `${cookie.name}=${cookie.value}`).join('; ')
+    },
+    body: JSON.stringify(updatedPage)
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};

@@ -1,5 +1,3 @@
-import ky from "ky";
-
 /**
  * Try to authenticate.
  * @example
@@ -11,11 +9,22 @@ import ky from "ky";
 export const authenticate = async (
   email: string,
   password: string,
-): Promise<{ isLogged: boolean }> =>
-  await ky.post("http://localhost:3333/auth/login", {
-    json: { email, password },
-    credentials: "include"
-  }).json()
+): Promise<{ isLogged: boolean }> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
 
 /**
  * Checks authentication.
@@ -25,14 +34,23 @@ export const authenticate = async (
  * ```
  */
 
-export const checkAuthentication = async (cookies: any): Promise<boolean> => 
-  await ky.get("http://localhost:3333/auth/me", { 
-    credentials: "include",
+export const checkAuthentication = async (cookies: any): Promise<boolean> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+    method: 'GET',
+    credentials: 'include',
     headers: {
       'Cookie': cookies.map((cookie: any) =>
-        `${cookie.name}=${cookie.value}`).join('; '),
-    } 
-  }).json()
+        `${cookie.name}=${cookie.value}`).join('; ')
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
 
 /**
  * Disconnect the user.
@@ -42,5 +60,14 @@ export const checkAuthentication = async (cookies: any): Promise<boolean> =>
  * ```
  */
 
-export const disconnect = async () => 
-  await ky.post("http://localhost:3333/auth/logout").json()
+export const disconnect = async (): Promise<void> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+    method: 'POST'
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};

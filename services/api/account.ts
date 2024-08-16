@@ -1,5 +1,4 @@
-import ky from "ky";
-import { User } from "../types";
+import { AccountInfo, User } from "../types";
 
 /**
  * Provides the authenticated user information.
@@ -9,11 +8,50 @@ import { User } from "../types";
  * ```
  */
 
-export const getAccountInfo = async (cookies: any): Promise<User> => 
-  await ky.get(`http://localhost:3333/account`, {
-    credentials: "include",
-    headers: { 
+export const getAccountInfo = async (cookies: any): Promise<User> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
       'Cookie': cookies.map((cookie: any) =>
         `${cookie.name}=${cookie.value}`).join('; ')
     }
-  }).json();
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+};
+
+
+/**
+ * Updates the user account information.
+ * @example
+ * ```ts
+ * await updateAccountInfo(cookies, data);
+ * ```
+ */
+
+export const updateAccountInfo = async (
+  updatedAccountInfo: AccountInfo,
+  cookies: any, 
+) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join('; '),
+  },
+    body: JSON.stringify(updatedAccountInfo),
+    credentials: 'include',
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Failed to update account info: ${response.statusText}`);
+  }
+
+  return await response.json();
+};

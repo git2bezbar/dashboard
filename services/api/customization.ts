@@ -1,5 +1,4 @@
-import ky from "ky";
-import { CustomizationSettings, UUID } from "../types";
+import { CustomizationSettings } from "../types";
 
 /**
  * Provides the customization settings for a given website.
@@ -10,28 +9,53 @@ import { CustomizationSettings, UUID } from "../types";
  */
 
 export const getCustomizationSettings = async (
-  uuid: UUID,
+  uuid: string,
   cookies: any,
-): Promise<CustomizationSettings> =>
-  await ky.get(`http://localhost:3333/${uuid}/customization`, {
-  headers: {
-    'Cookie': cookies.map((cookie: any) => 
-      `${cookie.name}=${cookie.value}`).join('; '),
+): Promise<CustomizationSettings> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/customization`, {
+    method: 'GET',
+    headers: {
+      'Cookie': cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join('; ')
+    },
+    credentials: 'include'
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
-}).json();
+
+  return await response.json();
+};
+
 
 /**
  * Updates the customization settings for a given website.
  * @example
  * ```ts
- * await updateCustomizationSettings(uuid, updatedCustomizationSettings);
+ * await updateCustomizationSettings(uuid, updatedCustomizationSettings, cookies);
  * ```
  */
 
 export const updateCustomizationSettings = async (
-  uuid: UUID,
+  uuid: string,
   updatedCustomizationSettings: CustomizationSettings,
-) => 
-  await ky.post(`http://localhost:3333/${uuid}/customization`, { 
-    json: updatedCustomizationSettings
-  }).json();
+  cookies: any,
+) => {  
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${uuid}/customization`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie': cookies.map((cookie: any) =>
+        `${cookie.name}=${cookie.value}`).join('; '),
+    },
+    body: JSON.stringify(updatedCustomizationSettings),
+    credentials: 'include'
+  });
+    
+  if (!response.ok) {
+    throw new Error(`Failed to update customization settings: ${response.statusText}`);
+  }
+  
+  return await response.json();
+};
