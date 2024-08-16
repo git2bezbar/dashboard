@@ -1,5 +1,4 @@
 import Sidebar from "@/src/components/Sidebar";
-import '../../globals.css'
 import AccountMenu from '@/src/components/AccountMenu';
 import { Toaster } from "@/src/ui/toaster";
 import '@fork2e/umbrella/dist/lib.min.css';
@@ -41,7 +40,7 @@ export default async function RootLayout({
 
   return (
     <html lang="fr">
-      <body className="grid grid-cols-dashboard font-raleway relative">
+      <body className="grid grid-cols-dashboard font-raleway">
         <AuthChecker
           isLogged={isLogged}
           userInfo={userInfo}

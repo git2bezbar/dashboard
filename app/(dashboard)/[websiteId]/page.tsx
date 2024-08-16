@@ -27,9 +27,8 @@ export default async function Home({ params : { websiteId } }: HomeProps) {
       <PageHeading>
         <Title>Rendons votre site web incroyable ! ✨</Title>
         <Subtitle>
-          Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend 
-          dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper 
-          elit.
+        Vous aurez une vue d’ensemble sur votre site web sur cette page. 
+        Vous pouvez naviguer à travers les pages présentées sur cette page et depuis le menu latéral.
         </Subtitle>
       </PageHeading>
       <div className="grid grid-cols-12 items-start">
@@ -45,9 +44,11 @@ export default async function Home({ params : { websiteId } }: HomeProps) {
               </h3>
               <div className="grid grid-cols-2 gap-8 items-center">
                 <Image
-                  src="https://via.placeholder.com/256"
+                  src="/256.png"
                   className="rounded-ui"
                   alt="Example image"
+                  width={256}
+                  height={256}
                 />
                 <div className="flex flex-col gap-4 items-start">
                   <h4 className="font-bold text-sm">Titre de niveau 2</h4>
