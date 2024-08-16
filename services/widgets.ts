@@ -5,66 +5,34 @@ export const textWidget = z.object({
   name: z.literal("Texte"),
   order: z.number(),
   content: z.object({
-    title: z.string(),
-    subtitle: z.string(),
+    title: z.string().min(1, "Le titre doit contenir au moins 1 caractère"),
+    subtitle: z.string().min(1, "Le sous-titre doit contenir au moins 1 caractère"),
+    hasButton: z.boolean(),
+    buttonContent: z.string().optional(),
+    buttonLink: z.string().optional(),
+  }).refine((data) => {
+    if (data.hasButton && !data.buttonContent && !data.buttonLink) {
+      return false;
+    }
+    return true;
+  }, {
+    message: "Le contenu et le lien du bouton est requis",
+    path: ["buttonContent"],
   }),
 });
 
-export const textImageWidget = z.object({
+export const menuWidget = z.object({
   id: z.number().optional(),
-  name: z.literal("Texte + Image"),
+  name: z.literal("Menu"),
   order: z.number(),
   content: z.object({
-    title: z.string(),
-    subtitle: z.string(),
-    image: z.number().or(z.string()),
-    imagePosition: z.union([ z.literal("left"), z.literal("right") ]),
-    imageAlt: z.string(),
+    items: z.array(z.object({
+      label: z.string(),
+      url: z.string(),
+    })),
   }),
 });
 
-export const bannerWidget = z.object({
-  id: z.number().optional(),
-  name: z.literal("Bannière"),
-  order: z.number(),
-  content: z.object({
-    title: z.string(),
-    bannerColor: z.union([ z.literal("primary"), z.literal("secondary") ]),
-  }),
-});
-
-export const highlightingWidget = z.object({
-  id: z.number().optional(),
-  name: z.literal("Mise en avant"),
-  order: z.number(),
-  content: z.object({
-    title: z.string(),
-    subtitle: z.string(),
-    image: z.number().or(z.string()),
-    imageAlt: z.string(),
-  }),
-});
-
-export const imageWidget = z.object({
-  id: z.number().optional(),
-  name: z.literal("Image"),
-  order: z.number(),
-  content: z.object({
-    title: z.string(),
-    image: z.number().or(z.string()),
-    imageAlt: z.string(),
-  }),
-});
-
-export const videoWidget = z.object({
-  id: z.number().optional(),
-  name: z.literal("Vidéo"),
-  order: z.number(),
-  content: z.object({
-    title: z.string(),
-    video: z.string(),
-  }),
-});
 
 // Empty widgets
 
@@ -74,56 +42,8 @@ export const emptyTextWidget: z.infer<typeof textWidget> = {
   content: {
     title: "",
     subtitle: "",
-  },
-};
-
-export const emptyTextImageWidget: z.infer<typeof textImageWidget> = {
-  name: "Texte + Image",
-  order: 0,
-  content: {
-    title: "",
-    subtitle: "",
-    image: 0,
-    imagePosition: "left",
-    imageAlt: "",
-  },
-};
-
-export const emptyBannerWidget: z.infer<typeof bannerWidget> = {
-  name: "Bannière",
-  order: 0,
-  content: {
-    title: "",
-    bannerColor: "primary",
-  },
-};
-
-export const emptyHighlightingWidget: z.infer<typeof highlightingWidget> = {
-  name: "Mise en avant",
-  order: 0,
-  content: {
-    title: "",
-    subtitle: "",
-    image: 0,
-    imageAlt: "",
-  },
-};
-
-export const emptyImageWidget: z.infer<typeof imageWidget> = {
-  name: "Image",
-  order: 0,
-  content: {
-    title: "",
-    image: 0,
-    imageAlt: "",
-  },
-};
-
-export const emptyVideoWidget: z.infer<typeof videoWidget> = {
-  name: "Vidéo",
-  order: 0,
-  content: {
-    title: "",
-    video: "",
+    hasButton: true,
+    buttonContent: "",
+    buttonLink: "legal",
   },
 };
