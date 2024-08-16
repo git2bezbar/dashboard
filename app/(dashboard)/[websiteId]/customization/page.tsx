@@ -25,15 +25,14 @@ export default async function Customization({
       <PageHeading>
         <Title>Personnalisation</Title>
         <Subtitle>
-          Cras elementum mi a libero sagittis sollicitudin. Quisque eleifend 
-          dapibus justo, sed euismod ipsum hendrerit non. Donec mollis semper 
-          elit.
+          La page “Personnalisation” vous permet de rendre votre site web unique grâce à différentes options. Créez le site web qui vous ressemble.
         </Subtitle>
       </PageHeading>
       <div className="grid grid-cols-12 items-start">
         <CustomizationSettingsForm
           settings={customizationSettings}
           websiteId={websiteId}
+          cookiesList={cookiesList}
         />
       </div>
     </> 
