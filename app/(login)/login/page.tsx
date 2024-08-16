@@ -11,7 +11,9 @@ export default async function Login() {
   
   let websiteId;
   
-  if (isLogged) { websiteId = (await getWebsite(cookiesList)).uuid }
+  if (isLogged) { 
+    websiteId = (await getWebsite(cookiesList)).uuid
+  }
 
   return (
     <div className="flex flex-col gap-4">

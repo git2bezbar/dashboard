@@ -69,9 +69,7 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="email">
-                <Label className="font-bold">Identifiant</Label>
-              </FormLabel>
+              <FormLabel className="font-bold" htmlFor="email">Identifiant</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -83,8 +81,8 @@ export default function LoginForm({ isLogged, websiteId }: LoginFormProps) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="password">
-                <Label className="font-bold">Mot de passe</Label>
+              <FormLabel className="font-bold" htmlFor="password">
+                Mot de passe
               </FormLabel>
               <FormControl>
                 <Input {...field} type="password"/>
