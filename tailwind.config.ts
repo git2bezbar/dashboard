@@ -19,6 +19,8 @@ const config: Config = {
         'subtitle': '#B0B0B0',
         'gray': "#D9D9D9",
         'hoveredSidebarItems': '#212121',
+        'success': '#24FF66',
+        'danger': '#FF2453'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
