@@ -18,16 +18,17 @@ export default async function Menu({ params : { websiteId } }: MenuProps) {
   
   const handleMenuUpdate = async (updatedMenu: MenuPage[]) => {
     "use server"
-    const updatedPages = await updateMenu(websiteId, updatedMenu, cookiesList);
+    await updateMenu(websiteId, updatedMenu, cookiesList);
   }
   
   return (
     <>
       <PageHeading>
         <Title>Menu</Title>
-        <Subtitle>Cras elementum mi a libero sagittis sollicitudin. Quisque 
-          eleifend dapibus justo, sed euismod ipsum hendrerit non. Donec mollis 
-          semper elit.</Subtitle>
+        <Subtitle>
+        La page Menu vous permet de gérer les menus dans le header et le footer de votre site web. 
+        Vous pouvez modifier l’ordre en glissant les pages et rendre une page active ou inactive en appuyant sur le bouton en forme d’interrupteur.
+        </Subtitle>
       </PageHeading>
 
       <div className="grid grid-cols-12 items-start">

@@ -6,7 +6,6 @@ import { Button, Label, Switch } from "@fork2e/umbrella";
 import { DndContext, closestCorners } from "@dnd-kit/core";
 import { FormEventHandler, useEffect, useState } from "react";
 import SortableList from "./SortableList";
-import { toast } from "@/src/ui/use-toast";
 
 export interface MenuFormProps {
   pages: MenuPage[];
@@ -24,6 +23,10 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
     });
     menuPagesOrder(newPages);
   }
+
+  const [hasSaved, setHasSaved] = useState(false);
+  const [hasFailed, setHasFailed] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
   
   useEffect(() => {
     menuPages.map((page, index) => {
@@ -35,19 +38,22 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
         menuPagesOrder(newPages);
       }
     });
-  }, [menuPages]);
+    setIsDirty(JSON.stringify(menuPages) !== JSON.stringify(pages));
+  }, [menuPages, pages]);
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = (e) => {
     try {
       handleMenuUpdate(menuPages);
-      toast({
-        title: "Paramètres de menu mis à jour ✨"
-      })
+      setHasSaved(true);
+      setTimeout(() => {
+        setHasSaved(false);
+      }, 3000);
+      setIsDirty(false);
     } catch (error) {
-      toast({
-        title: "Oups, les paramètres de menu n'ont pas pu être mis à jour 😢",
-        variant: "destructive"
-      })
+      setHasFailed(true);
+      setTimeout(() => {
+        setHasSaved(false);
+      }, 3000);
     }
   };
 
@@ -81,10 +87,26 @@ export default function MenuForm({ pages, handleMenuUpdate }: MenuFormProps) {
           )}
           />
       </DndContext>
-      <Button onClick={handleSubmit}>
+      <Button onClick={handleSubmit} disabled={!isDirty}>
         Sauvegarder les changements
       </Button>
       </div>
+
+      {
+        hasSaved && (
+          <p className="font-bold bg-success self-start px-8 py-4 rounded-ui">
+            Menu mis à jour ✨
+          </p>
+        )
+      }
+
+      {
+        hasFailed && (
+          <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
+            Oups, le menu n&pos;a pas pu être mis à jour 😢
+          </p>
+        )
+      }
     </div>
   )
 }
