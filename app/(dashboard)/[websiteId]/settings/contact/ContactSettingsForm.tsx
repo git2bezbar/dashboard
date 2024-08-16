@@ -12,13 +12,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ContactSettings as ContactSettingsType, UUID } from "@/services/types";
 import { updateContactSettings } from "@/services/api/contact-settings";
-import { toast } from "@/src/ui/use-toast";
 import { Button, Input, Switch } from "@fork2e/umbrella";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 export interface ContactSettingsFormProps {
   settings: ContactSettingsType;
   websiteId: UUID;
+  cookiesList: any;
 }
 
 const FormSchema = z.object({
@@ -34,6 +34,7 @@ const FormSchema = z.object({
 export default function ContactSettings({
   settings: providedSettings,
   websiteId,
+  cookiesList
 }: ContactSettingsFormProps) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -43,17 +44,22 @@ export default function ContactSettings({
     },
   })
 
+  const [hasSaved, setHasSaved] = useState(false);
+  const [hasFailed, setHasFailed] = useState(false);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
-      await updateContactSettings(websiteId, data);
-      toast({
-        title: "Paramètres de contact mis à jour ✨"
-      })
+      await updateContactSettings(websiteId, data, cookiesList);
+      setHasSaved(true);
+      setTimeout(() => {
+        setHasSaved(false);
+      }, 3000);
+      form.reset(data);
     } catch (error) {
-      toast({
-        title: "Oups, les paramètres de contact n'ont pas pu être mis à jour 😢",
-        variant: "destructive"
-      })
+      setHasFailed(true);
+      setTimeout(() => {
+        setHasSaved(false);
+      }, 3000);
     }
   }
 
@@ -148,6 +154,22 @@ export default function ContactSettings({
             Annuler
           </Button>
         </div>
+        
+        {
+          hasSaved && (
+            <p className="font-bold bg-success self-start px-8 py-4 rounded-ui">
+              Paramètres de contact mis à jour ✨
+            </p>
+          )
+        }
+
+        {
+          hasFailed && (
+            <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
+              Oups, les paramètres contact n&pos;ont pas pu être mis à jour 😢
+            </p>
+          )
+        }
       </form>
     </Form>
   )
