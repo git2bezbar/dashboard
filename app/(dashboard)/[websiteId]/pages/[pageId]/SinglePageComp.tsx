@@ -7,60 +7,36 @@ import {
   FormItem,
   FormLabel,
 } from "@/src/ui/form";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/src/ui/dialog"
-import { toast } from "@/src/ui/use-toast";
-import { updatePage } from "@/services/api/page";
+import { getPages, updatePage } from "@/services/api/page";
 import { Page, UUID } from "@/services/types";
 import {
   Button,
   Input,
-  Label,
-  RadioGroup,
-  RadioGroupItem,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Switch,
 } from "@fork2e/umbrella";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  bannerWidget,
-  emptyBannerWidget,
-  emptyTextImageWidget,
-  emptyTextWidget,
-  emptyVideoWidget,
-  textImageWidget,
-  textWidget,
-  videoWidget,
-} from "@/services/widgets";
+import { emptyTextWidget, textWidget } from "@/services/widgets";
+import { PAGE_NAMES } from "@/services/commons";
 
 export interface SinglePageCompProps {
   page: Page;
   pageId: UUID;
   websiteId: UUID;
+  menuPages: Page[];
   cookiesList: any;
 }
 
 const FormSchema = z.object({
   description: z.string(),
-  widgets: z.array(z.union([
-    textImageWidget,
-    textWidget,
-    bannerWidget,
-    videoWidget
-  ])),
+  widgets: z.array(textWidget),
   id: z.number(),
   type: z.union([
     z.literal('home'),
@@ -81,6 +57,7 @@ export default function SinglePageComp({
   page: providedPage,
   pageId,
   websiteId,
+  menuPages,
   cookiesList
 }: SinglePageCompProps) {
 
@@ -91,6 +68,9 @@ export default function SinglePageComp({
     },
   })
 
+  const [hasSaved, setHasSaved] = useState(false);
+  const [hasFailed, setHasFailed] = useState(false);
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: 'widgets',
@@ -98,20 +78,20 @@ export default function SinglePageComp({
 
   const renderTextWidget = 
   (widget: z.infer<typeof textWidget>, form: any, index: number) => {
+    const errors = form.formState.errors;
+  
     return (
       <div className="flex flex-col gap-4" key={widget.id}>
         <div className="flex items-center justify-between">
-          <h3 className="font-bold">{ widget.name }</h3>
-          <Button
-            variant="subtle"
-            onClick={() => remove(index)}
-          >
-            Supprimer
-          </Button>
+          <h3 className="font-bold mr-auto">{ widget.name }</h3>
+          {
+            index > 0 &&
+              <Button variant="subtle" onClick={() => remove(index)}>
+                Supprimer
+              </Button>
+          }
         </div>
-        <div
-          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
-        >
+        <div className="flex flex-col gap-8 p-4 rounded-ui border border-black/10">
           <FormField 
             control={form.control}
             name={`widgets.${index}.content.title`}
@@ -131,6 +111,13 @@ export default function SinglePageComp({
                     {...form.register(`widgets.${index}.content.title`)}
                   />
                 </FormControl>
+                {
+                  errors.widgets?.[index]?.content?.title && (
+                    <div className="text-red-500 mt-4">
+                      { errors.widgets[index].content.title.message }
+                    </div>
+                  )
+                }
               </FormItem>
             )}
           />
@@ -153,289 +140,138 @@ export default function SinglePageComp({
                     {...form.register(`widgets.${index}.content.subtitle`)}
                   />
                 </FormControl>
+                {
+                  errors.widgets?.[index]?.content?.subtitle && (
+                    <div className="text-red-500 mt-4">
+                      {errors.widgets[index].content.subtitle.message}
+                    </div>
+                  )
+                }
               </FormItem>
             )}
           />
-        </div>
-      </div>
-    )
-  }
+          <FormField 
+            control={form.control}
+            name={`widgets.${index}.content.hasButton`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel
+                  htmlFor={`widgets.${index}.content.hasButton`}
+                  className="font-bold mr-4"
+                >
+                  Bouton
+                </FormLabel>
+                <FormControl>
+                  <Switch
+                    id={`widgets.${index}.content.hasButton`}
+                    checked={field.value as boolean}
+                    onCheckedChange={(e) => {
+                      console.log('malafak', !field.value);
+                      form.setValue(
+                        `widgets.${index}.content.hasButton`,
+                        !field.value,
+                        { shouldDirty: true, shouldValidate: true }
+                      )
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-  const renderTextImageWidget = 
-  (widget: z.infer<typeof textImageWidget>, form: any, index: number) => {
-    return (
-      <div className="flex flex-col gap-4" key={widget.id}>
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold">{ widget.name }</h3>
-          <Button
-            variant="subtle"
-            onClick={() => remove(index)}
-          >
-            Supprimer
-          </Button>
-        </div>
-        <div
-          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
-        >
-          <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.title`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.title`}
-                  className="font-bold"
-                >
-                  Titre
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    { ...field }
-                    id={`widgets.${index}.content.title`}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.subtitle`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.subtitle`}
-                  className="font-bold"
-                >
-                  Sous-titre
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id={`widgets.${index}.content.subtitle`}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name={`widgets.${index}.content.imagePosition`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.imagePosition`}
-                  className="font-bold"
-                >
-                  Position de l&apos;image
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    className="flex flex-col items-start gap-4"
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    <FormItem className="flex items-center gap-4">
-                      <FormControl>
-                        <RadioGroupItem value="left" id={`left.${index}`} />
-                      </FormControl>
-                      <FormLabel>
-                        <Label htmlFor={`left.${index}`}>Image à gauche</Label>
+          {
+            form.watch(`widgets.${index}.content.hasButton`) ? (
+              <>
+                <FormField 
+                  control={form.control}
+                  name={`widgets.${index}.content.buttonContent`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor={`widgets.${index}.content.buttonContent`}
+                        className="font-bold"
+                      >
+                        Contenu du bouton
                       </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center gap-4">
                       <FormControl>
-                        <RadioGroupItem value="right" id={`right.${index}`} />
+                        <Input
+                          {...field}
+                          id={`widgets.${index}.content.buttonContent`}
+                          value={field.value}
+                          {...form.register(`widgets.${index}.content.buttonContent`)}
+                        />
                       </FormControl>
-                      <FormLabel>
-                        <Label htmlFor={`right.${index}`}>Image à droite</Label>
-                      </FormLabel>
+                      {
+                        errors.widgets?.[index]?.content?.buttonContent && (
+                          <div className="text-red-500 mt-4">
+                            {errors.widgets[index].content.buttonContent.message}
+                          </div>
+                        )
+                      }
                     </FormItem>
-                  </RadioGroup>
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.imageAlt`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.imageAlt`}
-                  className="font-bold"
-                >
-                  Description de l&apos;image
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id={`widgets.${index}.content.imageAlt`}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+                  )}
+                />
+                <FormField 
+                  control={form.control}
+                  name={`widgets.${index}.content.buttonLink`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel
+                        htmlFor={`widgets.${index}.content.buttonLink`}
+                        className="font-bold"
+                      >
+                        Lien du bouton
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue
+                                placeholder="Choisissez une page"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {
+                              menuPages.map((page) => (
+                                <SelectItem key={page.id} value={page.type}>
+                                  { PAGE_NAMES[page.type] }
+                                </SelectItem>
+                              ))
+                            }
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </>
+            ) : null
+          }          
         </div>
       </div>
     )
   }
-
-  const renderBannerWidget =
-  (widget: z.infer<typeof bannerWidget>, form: any, index: number) => {
-    return (
-      <div className="flex flex-col gap-4" key={widget.id}>
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold">{ widget.name }</h3>
-          <Button
-            variant="subtle"
-            onClick={() => remove(index)}
-          >
-            Supprimer
-          </Button>
-        </div>
-        <div
-          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
-        >
-          <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.title`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.title`}
-                  className="font-bold"
-                >
-                  Titre
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id={`widgets.${index}.content.title`}
-                    value={field.value}
-                    {...form.register(`widgets.${index}.content.title`)}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-              control={form.control}
-              name={`widgets.${index}.content.bannerColor`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    <Label
-                      htmlFor={`widgets.${index}.content.bannerColor`}
-                      className="font-bold"
-                    >
-                      Couleur de la bannière
-                    </Label>
-                  </FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-[300px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="primary">
-                        Couleur principale
-                      </SelectItem>
-                      <SelectItem value="secondary">
-                        Couleur secondaire
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-        </div>
-      </div>
-    )
-  }
-
-  const renderVideoWidget =
-  (widget: z.infer<typeof videoWidget>, form: any, index: number) => {
-    return (
-      <div className="flex flex-col gap-4" key={widget.id}>
-        <div className="flex items-center justify-between">
-          <h3 className="font-bold">{ widget.name }</h3>
-          <Button
-            variant="subtle"
-            onClick={() => remove(index)}
-          >
-            Supprimer
-          </Button>
-        </div>
-        <div
-          className="flex flex-col gap-8 p-4 rounded-ui border border-black/10"
-        >
-          <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.title`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.title`}
-                  className="font-bold"
-                >
-                  Titre
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id={`widgets.${index}.content.title`}
-                    value={field.value}
-                    {...form.register(`widgets.${index}.content.title`)}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField 
-            control={form.control}
-            name={`widgets.${index}.content.video`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor={`widgets.${index}.content.video`}
-                  className="font-bold"
-                >
-                  Lien de la vidéo
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id={`widgets.${index}.content.video`}
-                    value={field.value}
-                    {...form.register(`widgets.${index}.content.video`)}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
-      </div>
-    )
-  }
-
+  
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       data.widgets.map((widget: any, i) => {
         widget.order = i;
       });
       await updatePage(websiteId, pageId, data, cookiesList);
-      toast({
-        title: "Page mise à jour ✨"
-      })
+      setHasSaved(true);
+      setTimeout(() => {
+        setHasSaved(false);
+      }, 3000);
+      form.reset(data);
     } catch (error) {
-      toast({
-        title: "Oups, la page n'a pas pu être mise à jour 😢",
-        variant: "destructive"
-      })
+      setHasFailed(true);
+      setTimeout(() => {
+        setHasSaved(false);
+      }, 3000);
     }
   }
   
@@ -443,6 +279,11 @@ export default function SinglePageComp({
     e.preventDefault();
     form.reset();
   };
+
+  useEffect(() => {
+    console.log(form.formState.errors);
+  }
+  , [form.formState.errors]);
 
   return (
     <Form {...form}>
@@ -465,71 +306,14 @@ export default function SinglePageComp({
           )}
         />
 
-        { 
-          fields.map((widget, index) => {
-            switch (widget.name) {
-              case "Bannière":
-                return renderBannerWidget(widget, form, index);
-              case "Texte":
-                return renderTextWidget(widget, form, index);
-              case "Texte + Image":
-                return renderTextImageWidget(widget, form, index);
-              case "Vidéo":
-                return renderVideoWidget(widget, form, index);
-              default:
-                return null;
-            }
-          })
-        }
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button size="fullWidth">Ajouter un widget</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Ajouter une zone</DialogTitle>
-              <DialogDescription className="flex gap-8 pt-4">
-                <DialogClose>
-                  <Button
-                    variant="subtle"
-                    className="p-4 rounded-ui border border-black/10"
-                    onClick={() => append({ ...emptyTextImageWidget })}
-                  >
-                    Texte + Image
-                  </Button>
-                </DialogClose>
-                <DialogClose>
-                  <Button
-                    variant="subtle"
-                    className="p-4 rounded-ui border border-black/10"
-                    onClick={() => append({ ...emptyTextWidget })}
-                  >
-                    Texte
-                  </Button>
-                </DialogClose>
-                <DialogClose>
-                  <Button
-                    variant="subtle"
-                    className="p-4 rounded-ui border border-black/10"
-                    onClick={() => append({ ...emptyBannerWidget })}
-                  >
-                    Bannière
-                  </Button>
-                </DialogClose>
-                <DialogClose>
-                  <Button
-                    variant="subtle"
-                    className="p-4 rounded-ui border border-black/10"
-                    onClick={() => append({ ...emptyVideoWidget })}
-                  >
-                    Vidéo
-                  </Button>
-                </DialogClose>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        { fields.map((widget, index) => renderTextWidget(widget, form, index)) }
+                
+        <Button
+          size="fullWidth"
+          onClick={() => append({ ...emptyTextWidget })}
+        >
+          Ajouter une zone texte
+        </Button>
         
         <div className="flex gap-4">
           <Button disabled={!form.formState.isDirty} type="submit">
@@ -543,6 +327,22 @@ export default function SinglePageComp({
             Annuler
           </Button>
         </div>
+
+        {
+          hasSaved && (
+            <p className="font-bold bg-success self-start px-8 py-4 rounded-ui">
+              Page mise à jour ✨
+            </p>
+          )
+        }
+
+        {
+          hasFailed && (
+            <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
+              Oups, la page n&pos;a pas pu être mise à jour 😢
+            </p>
+          )
+        }
       </form>
     </Form>
   )
