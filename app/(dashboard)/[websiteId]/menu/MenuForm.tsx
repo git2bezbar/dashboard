@@ -107,7 +107,7 @@ export default function MenuForm ({ pages, handleMenuUpdate }: MenuFormProps) {
       {
         hasFailed && (
           <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
-            Oups, le menu n&pos;a pas pu être mis à jour 😢
+            Oups, le menu n&apos;a pas pu être mis à jour 😢
           </p>
         )
       }

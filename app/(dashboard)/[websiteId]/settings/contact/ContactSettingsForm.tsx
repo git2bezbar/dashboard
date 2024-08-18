@@ -167,7 +167,7 @@ export default function ContactSettings ({
         {
           hasFailed && (
             <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
-              Oups, les paramètres contact n&pos;ont pas pu être mis à jour 😢
+              Oups, les paramètres contact n&apos;ont pas pu être mis à jour 😢
             </p>
           )
         }

@@ -349,7 +349,7 @@ export default function GeneralSettingsForm ({
         {
           hasFailed && (
             <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
-              Oups, les paramètres généraux n&pos;ont pas pu être mis à jour 😢
+              Oups, les paramètres généraux n&apos;ont pas pu être mis à jour 😢
             </p>
           )
         }

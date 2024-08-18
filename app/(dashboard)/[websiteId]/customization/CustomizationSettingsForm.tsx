@@ -174,7 +174,7 @@ export default function CustomizationSettingsForm ({
         {
           hasFailed && (
             <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
-              Oups, les paramètres de personnalisation n&pos;ont pas pu être mis à jour 😢
+              Oups, les paramètres de personnalisation n&apos;ont pas pu être mis à jour 😢
             </p>
           )
         }
