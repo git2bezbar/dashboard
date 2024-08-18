@@ -83,3 +83,24 @@ export interface AccountInfo {
   lastname: string;
   firstname: string;
 }
+
+export interface Category {
+  id: number;
+  name: string
+}
+
+export interface Product {
+  title: string;
+  description: string;
+  price: number;
+  category_id: number;
+}
+
+export interface MenuCard {
+  content: { [key: string]: Product};
+  websiteId: number;
+}
+
+export interface UpdatedProducts {
+  content: { [key: string]: Product};
+}

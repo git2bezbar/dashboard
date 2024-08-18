@@ -281,11 +281,6 @@ export default function SinglePageComp ({
     form.reset();
   };
 
-  useEffect(() => {
-    console.log(form.formState.errors);
-  }
-  , [form.formState.errors]);
-
   return (
     <Form {...form}>
       <form
@@ -340,7 +335,7 @@ export default function SinglePageComp ({
         {
           hasFailed && (
             <p className="font-bold bg-danger self-start px-8 py-4 rounded-ui">
-              Oups, la page n&pos;a pas pu être mise à jour 😢
+              Oups, la page n&apos;a pas pu être mise à jour 😢
             </p>
           )
         }

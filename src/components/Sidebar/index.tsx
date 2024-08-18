@@ -64,6 +64,12 @@ export default function Sidebar ({ websiteId }: SidebarProps) {
           >
             Paramètres de contact
           </SidebarItem>
+          <SidebarItem
+            link={`/${websiteId}/card`}
+            isCurrentPage={pathname.includes("/card")}
+          >
+            Carte des menus
+          </SidebarItem>
         </ul>
       </nav>
     </header>
